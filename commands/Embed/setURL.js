@@ -1,10 +1,10 @@
 module.exports = {
     // Info
-    name: 'setauthorurl',
-    description: 'Set an image to for the #help-desk embed',
-    aliases: ['sauthorurl'],
+    name: 'seturl',
+    description: 'Set an url for the title of the #help-desk embed',
+    aliases: ['surl'],
     args: true,
-    usage: '<imageURL> or <{delete}> to remove',
+    usage: '<URL> or <{delete}> to remove',
     cooldown: 5,
     // Basic checks
     guildOnly: true,
@@ -18,8 +18,8 @@ module.exports = {
             message.client.errorEmbed.setDescription('You need to provide a correct URL.\nAlternatively you can use `{delete}` to remove the image from the embed.');
             return message.channel.send(message.client.errorEmbed);
         }
-        await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.author.url']: url } });
-        message.client.replyEmbed.setDescription('Author URL set.\nUse `hd?update` to apply the changes to the #help-desk embed.');
+        await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.url']: url } });
+        message.client.replyEmbed.setDescription('Title URL set.\nUse `hd?update` to apply the changes to the #help-desk embed.');
         await message.channel.send(message.client.replyEmbed);
     },
 };
