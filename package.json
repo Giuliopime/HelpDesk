@@ -1,0 +1,21 @@
+{
+  "name": "astro",
+  "version": "1.0.0",
+  "description": "The best Discord Bot for #help-desks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {},
+  "author": "Giulio Pimenoff Verdolin",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "mongoose": "^5.9.27",
+    "require-all": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
