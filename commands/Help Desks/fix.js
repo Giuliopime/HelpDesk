@@ -6,6 +6,7 @@ module.exports = {
 	cooldown: 30,
 	// Basic checks
 	guildOnly: true,
+	chooseDesk: true,
 	// Command Category
 	helpdesk: true,
 	async execute(data, member, message) {
