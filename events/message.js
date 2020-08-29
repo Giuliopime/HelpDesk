@@ -50,22 +50,24 @@ module.exports = async (client, message) => {
 					const helpDesk = data.helpDesks[deskIndex];
 					if(!isNaN(message.content)) {
 						const reply = helpDesk.fieldsReplies[message.content - 1];
-						if(reply) await message.author.send(reply)
+						if(reply) message.author.send(reply)
 							.catch(()=>message.channel.send(`<@${message.author.id}> make sure your DMs are open.\n*If you don't know how check out this article <https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings->*`).then(msg => setTimeout(()=>msg.delete(), 10000)));
 					}
 					else if(message.content === helpDesk.specialTrigger) {
-						const reply = helpDesk.specialAnswer;
-						if(reply) await message.author.send(reply)
-							.catch(()=>message.channel.send(`<@${message.author.id}> make sure your DMs are open.\n*If you don't know how check out this article <https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings->*`)
-								.then(msg => setTimeout(()=>msg.delete(), 10000)));
-
-						const roleToAssing = message.guild.roles.resolve(helpDesk.specialRole);
-						if(roleToAssing) await message.member.roles.add(roleToAssing)
-							.catch(async ()=> {
-								client.errorEmbed.setDescription(`I\'m unable to assign the <@&${roleToAssing.id}> role. Make sure I have \`Manage_Roles\` permissions and that the role I have to assign is under the Help Desk role in the server role hierarchy.`);
-								await message.channel.send(client.errorEmbed)
-									.then(msg=>setTimeout(()=>msg.delete(), 10000))
-							})
+						const roleToAssign = message.guild.roles.resolve(helpDesk.specialRole);
+						if(roleToAssign) {
+							message.member.roles.add(roleToAssign.id)
+								.then(()=>{
+									message.author.send(`I assigned you the @${roleToAssign.name} role in ${message.guild.name}.`)
+										.catch(()=>message.channel.send(`<@${message.author.id}> make sure your DMs are open.\n*If you don't know how check out this article <https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings->*`)
+											.then(msg => setTimeout(()=>msg.delete(), 10000)));
+								})
+								.catch(() => {
+									client.errorEmbed.setDescription(`I\'m unable to assign the <@&${roleToAssign.id}> role. Make sure I have \`Manage_Roles\` permissions and that the role I have to assign is under the Help Desk role in the server role hierarchy.\nLearn more with [this article](https://support.discord.com/hc/en-us/articles/214836687-Gestione-dei-Ruoli-101).`);
+									message.channel.send(client.errorEmbed)
+										.then(msg => setTimeout(() => msg.delete(), 200000))
+								})
+						}
 					}
 					await message.delete();
 				}

@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
     // Info
     name: 'new',
-    description: 'Create a new #help-desk channel template',
+    description: 'Create a new #help-desk channel template.',
     aliases: ['newhd'],
     args: false,
     cooldown: 5,
@@ -29,7 +29,8 @@ module.exports = {
             .setDescription('[Description]')
             .addFields(
                 {name: '\u200b', value: '`1.` [Question example]'},
-                    {name: '\u200b', value: '`2.` [Question 2 example]'}
+                    {name: '\u200b', value: '`2.` [Question 2 example]'},
+                    {name: '\u200b', value: '`?` [Special question which you can use to assign roles]'}
             )
             .setImage(message.client.user.displayAvatarURL())
             .setFooter('[Footer]')
@@ -47,9 +48,8 @@ module.exports = {
                 timestamp: null,
                 color: message.guild.me.displayColor,
                 fields: [
-                    {name: '\u200b', value: '`1.` [Question example]', inline: false},
-                    {name: '\u200b', value: '`2.` [Question 2 example]', inline: false},
-                    {name: '\u200b', value: '`?` [Special question]', inline: false}
+                    {name: '\u200b', value: '[Question example]', inline: false},
+                    {name: '\u200b', value: '[Question 2 example]', inline: false},
                 ],
                 thumbnail: {
                     url: message.client.user.displayAvatarURL(),
@@ -68,8 +68,8 @@ module.exports = {
                 "Simple answer",
                 "Simple answer 2"
             ],
-            specialTrigger: "?",
-            specialAnswer: "You can make me assign roles with this special question",
+            specialQuestion: '[Special Question]',
+            specialTrigger: '?',
             specialRole: undefined,
         }
 

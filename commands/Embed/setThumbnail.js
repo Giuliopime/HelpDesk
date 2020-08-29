@@ -15,7 +15,7 @@ module.exports = {
         if(args[0] === '{delete}') url = undefined;
         const isValid = message.client.isValidURL(url);
         if(!isValid && args[0] !== '{delete}') {
-            message.client.errorEmbed.setDescription('You need to provide a correct URL for an image.\nYou can use tools like [imgbb](https://it.imgbb.com/) to get a permanent URL for an image.\nWhen using imgbb make sure to select the \'html code\'->\'original image with link\'->copy the url in the src="" attribute of the <img> tag.\n\nAlternatively you can use `{delete}` to remove the image from the embed.');
+            message.client.errorEmbed.setDescription('You need to provide a correct URL for an image.\nYou can use tools like [imgbb](https://imgbb.com/) to get a permanent URL for an image.\nWhen using imgbb make sure to select the \'HTML codes\'->\'HTML full linked\'->copy the url in the src="" attribute of the <img> tag.\n\nAlternatively you can use `{delete}` to remove the image from the embed.');
             return message.channel.send(message.client.errorEmbed);
         }
         await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.thumbnail.url']: url } });

@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
     // Info
     name: 'update',
-    description: 'Update the #help-desk embed',
+    description: 'Update the #help-desk embed.',
     aliases: ['hdupdate'],
     args: false,
     cooldown: 5,
@@ -34,6 +34,15 @@ module.exports = {
         if(embedProperties.footer) newEmbed.setFooter(embedProperties.footer)
         if(embedProperties.image.url) newEmbed.setImage(embedProperties.image.url)
         if(embedProperties.timestamp) newEmbed.setTimestamp(embedProperties.timestamp)
+        if(embedProperties.fields.length) {
+            let i=1;
+            embedProperties.fields.forEach(field => {
+                field.value = `\`${i}.\` ` + field.value;
+                newEmbed.addField(field.name, field.value, false);
+                i++;
+            })
+        }
+        if(helpDesk.specialQuestion) newEmbed.addField('\u200b', `\`${helpDesk.specialTrigger}\` ${helpDesk.specialQuestion}`);
         hdMessage.edit(newEmbed)
             .then(msg=>{
                 message.client.replyEmbed.setDescription(`Embed correctly updated: [embed](${msg.url})`);

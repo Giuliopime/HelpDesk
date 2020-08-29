@@ -11,7 +11,7 @@ module.exports = {
     guildOnly: true,
     chooseDesk: true,
     // Command Category
-    helpdesk: true,
+    dev: true,
     async execute(data, member, message, args, deskIndex) {
         const helpDesk = data.helpDesks[deskIndex];
         let jsonMessage = `\`\`\`json\n${JSON.stringify(helpDesk)}\n\`\`\`\nYou can save this text in a text file and re-upload it to the bot if you are gonna use those help-desk settings in the future or in another server via the \`hd?load\` command.`;

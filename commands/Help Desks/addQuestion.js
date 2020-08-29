@@ -24,6 +24,14 @@ module.exports = {
         }
         const question = parameters[0];
         const answer = parameters[1];
+        if(question.length > 500) {
+            message.client.errorEmbed.setDescription('The question can\'t be longer than 500 characters.');
+            return message.channel.send(message.client.errorEmbed);
+        }
+        if(answer.length > 500) {
+            message.client.errorEmbed.setDescription('The answer can\'t be longer than 500 characters.');
+            return message.channel.send(message.client.errorEmbed);
+        }
         data.helpDesks[index].embedProperties.fields.push({name: '\u200b', value: question, inline: false});
         data.helpDesks[index].fieldsReplies.push(answer);
         await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: { ['helpDesks.'+index]: data.helpDesks[index] }});
