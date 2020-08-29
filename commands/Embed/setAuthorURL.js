@@ -1,8 +1,8 @@
 module.exports = {
     // Info
-    name: 'setAuthorURL',
+    name: 'setauthorurl',
     description: 'Set an image to for the #help-desk embed',
-    aliases: ['sAuthorURL'],
+    aliases: ['sauthorurl'],
     args: true,
     usage: '<imageURL> or <{delete}> to remove',
     cooldown: 5,

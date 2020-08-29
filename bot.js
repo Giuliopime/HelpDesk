@@ -107,3 +107,7 @@ client.errorEmbed = new Discord.MessageEmbed()
 	.setColor('#ed0c0c')
 	.setTitle('\\🛠️  **Help Desk Internal Error**')
 	.setFooter('For support use hd?help');
+
+client.replyEmbed = new Discord.MessageEmbed()
+	.setColor('#000')
+	.setFooter('type \'hd?help\' for support');

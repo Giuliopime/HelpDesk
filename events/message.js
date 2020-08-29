@@ -166,7 +166,7 @@ module.exports = async (client, message) => {
 			return client.errorEmbed.setFooter('For support use <>help');
 		}
 
-		if (command.helpDesks && !isModerator) {
+		if ((command.helpDesks || command.embed) && !isModerator) {
 			client.errorEmbed.setDescription(`*<@${message.author.id}> you do not have the required permissions to use this command (Manage Messages).*`);
 			return message.channel.send(client.errorEmbed);
 		}

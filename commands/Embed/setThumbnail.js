@@ -1,10 +1,10 @@
 module.exports = {
     // Info
-    name: 'setimage',
-    description: 'Set an image to for the #help-desk embed',
-    aliases: ['simage'],
+    name: 'setthumbnail',
+    description: 'Set a thumbnail to for the #help-desk embed',
+    aliases: ['sthumbnail'],
     args: true,
-    usage: '<imageURL> or <{delete}> to remove',
+    usage: '<URL> or <{delete}> to remove',
     cooldown: 5,
     // Basic checks
     guildOnly: true,
