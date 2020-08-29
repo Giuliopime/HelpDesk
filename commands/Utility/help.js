@@ -35,6 +35,10 @@ module.exports = {
 					category = 'helpdesk';
 					categoryName = 'Help Desk'
 					break;
+				case 'embed':
+					category = 'embed';
+					categoryName = 'Embed'
+					break;
 				case 'utility':
 					category = 'utility';
 					categoryName = 'Utility'
@@ -52,6 +56,7 @@ module.exports = {
 			helpEmbed.setAuthor(`Help Command`, `${message.client.user.displayAvatarURL()}`)
 				.addFields(
 					{name: `Help-Desk Commands`, value: `\`${message.client.commands.filter(cmd => cmd.helpdesk).map(cmd => cmd.name).join('\`, \`')}\``},
+					{name: `Embed Commands`, value: `\`${message.client.commands.filter(cmd => cmd.embed).map(cmd => cmd.name).join('\`, \`')}\``},
 					{name: `Utility commands`, value: `\`${message.client.commands.filter(cmd => cmd.utility).map(cmd => cmd.name).join('\`, \`')}\``},
 					{name: `Useful Links`, value: `[Support](https://discord.gg/4BTXnXu) | [Invite](https://discord.com/oauth2/authorize?client_id=739796627681837067&scope=bot&permissions=268954832)`},
 				)
