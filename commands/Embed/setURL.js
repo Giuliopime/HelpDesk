@@ -14,7 +14,7 @@ module.exports = {
         let url = args[0];
         if(args[0] === '{delete}') url = undefined;
         const isValid = message.client.isValidURL(url);
-        if(!isValid && url !== '{delete}') {
+        if(!isValid && args[0] !== '{delete}') {
             message.client.errorEmbed.setDescription('You need to provide a correct URL.\nAlternatively you can use `{delete}` to remove the image from the embed.');
             return message.channel.send(message.client.errorEmbed);
         }
