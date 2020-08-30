@@ -13,16 +13,16 @@ module.exports = {
     async execute(data, member, message) {
 
         // Define the arrays of the commands separed by category
-        const pages = [' ', 'Create an #help-desk', 'Personalize the Embed Message', 'Add Questions', 'Special Question'];
+        const pages = [' ', 'Create an #help-desk', 'Personalize the Embed Message', 'Add Questions', 'Special Question', 'Advanced Settings Editing'];
         let page = 1;
 
         const tutorialEmbed = new Discord.MessageEmbed()
-            .setColor('#000000')
+            .setColor(message.client.mainColor)
             .setTitle('Welcome to the Tutorial!')
             .setThumbnail(message.client.user.displayAvatarURL())
             .setDescription(`Let\'s get started!\nNavigate trough this tutorial sections to learn how to use <@${message.guild.me.id}>.`)
             .addFields(
-                { name: 'Tutorial Sections', value: '**>** Introduction (this page)\n**>** Create an #help-desk\n**>** Personalize the Embed Message\n**>** Add questions\n**>** Special Question'},
+                { name: 'Tutorial Sections', value: '**>** Introduction (this page)\n**>** Create an #help-desk\n**>** Personalize the Embed Message\n**>** Add questions\n**>** Special Question\n**>** Advanced Settings Editing'},
                 { name: 'How to move trough this tutorial', value: 'Use reactions below to navigate trough the tutorial pages'},
             )
             .setFooter(`Page ${page} of ${pages.length}`)
@@ -71,7 +71,7 @@ module.exports = {
                         .setThumbnail(message.client.user.displayAvatarURL())
                         .setDescription(`Let\'s get started!\nNavigate trough this tutorial sections to learn how to use <@${message.guild.me.id}>.`)
                     tutorialEmbed.fields = [
-                        { name: 'Tutorial Sections', value: '**>** Introduction (this page)\n**>** Create an #help-desk\n**>** Personalize the Embed Message\n**>** Add questions\n**>** Special Question'},
+                        { name: 'Tutorial Sections', value: '**>** Introduction (this page)\n**>** Create an #help-desk\n**>** Personalize the Embed Message\n**>** Add questions\n**>** Special Question\n**>** Advanced Settings Editing'},
                         { name: 'How to move trough this tutorial', value: 'Use reactions below to navigate trough the tutorial pages'},
                     ]
                     tutorialEmbed.image = undefined;
@@ -103,7 +103,15 @@ module.exports = {
                 if (page === 5) {
                     tutorialEmbed
                         .setTitle(pages[page-1])
-                        .setDescription('**The *Special Question* is a cool kind of question: when the user queries it (sending `?` in the #help-desk channel) a role will be applied to the user.**\n\n**>** You can learn how to add a *Special Question* using `hd?help specialQuestion`\n**>** You will always be able to delete it with `hd?delSpecialQuestion`.\n\nThe tutorial has ended, hopefully it was helpful to you.\nHere are some other useful links:\n[Support](https://discord.gg/4BTXnXu) | [Invite](https://discord.com/oauth2/authorize?client_id=739796627681837067&scope=bot&permissions=268954832)');
+                        .setDescription('**The *Special Question* is a cool kind of question: when the user queries it (sending `?` in the #help-desk channel) a role will be applied to the user.**\n\n**>** You can learn how to add a *Special Question* using `hd?help specialQuestion`\n**>** You will always be able to delete it with `hd?delSpecialQuestion`.\n\nIn the next sections you can find out how to export and load the help-desk settings.');
+                    tutorialEmbed.image = undefined;
+                    tutorialEmbed.thumbnail = undefined;
+                    tutorialEmbed.fields = [];
+                }
+                if (page === 6) {
+                    tutorialEmbed
+                        .setTitle(pages[page-1])
+                        .setDescription('**If you know how to use json files you can edit my settings in a much quicker way!**\n\n**>** Download the current settings of an #help-desk with `hd?save`.\nThis will give you an example of what the help-desk settings look like.\n\n**>** Once you tweaked the json file a bit, you can load those settings into an help desk with `hd?load`.\n\nYou can use tools like [jsoneditoronline](https://jsoneditoronline.org/) to modify json files.\n\n**Just like that you can export and import #help-desk templates!**\n\n*The tutorial has ended, hopefully it was helpful to you.\nHere are some other useful links:*\n[Support](https://discord.gg/4BTXnXu) | [Invite](https://discord.com/oauth2/authorize?client_id=739796627681837067&scope=bot&permissions=268954832)');
                     tutorialEmbed.image = undefined;
                     tutorialEmbed.thumbnail = undefined;
                     tutorialEmbed.fields = [];

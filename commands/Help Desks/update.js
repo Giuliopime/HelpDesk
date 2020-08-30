@@ -24,6 +24,7 @@ module.exports = {
             message.client.errorEmbed.setDescription('I couldn\'t find the #help-desk message embed, if it has been deleted use the `hd?fix` command');
             return message.channel.send(message.client.errorEmbed);
         }
+        await hdMessage.reactions.removeAll();
         const embedProperties = helpDesk.embedProperties;
         let newEmbed = new Discord.MessageEmbed();
         if(embedProperties.title) newEmbed.setTitle(embedProperties.title)
@@ -37,13 +38,18 @@ module.exports = {
         if(embedProperties.timestamp) newEmbed.setTimestamp(embedProperties.timestamp)
         if(embedProperties.fields.length) {
             let i=1;
-            embedProperties.fields.forEach(field => {
-                field.value = `\`${i}.\` ` + field.value;
-                newEmbed.addField(field.name, field.value, false);
+            embedProperties.fields.forEach(async field => {
+                let emoji = message.client.helpDeskEmojis[i];
                 i++;
-            })
+                field = `${emoji} ` + field;
+                newEmbed.addField('\u200b', field, false);
+                await hdMessage.react(emoji);
+            });
         }
-        if(helpDesk.specialQuestion) newEmbed.addField('\u200b', `\`${helpDesk.specialTrigger}\` ${helpDesk.specialQuestion}`);
+        if(helpDesk.specialQuestion && helpDesk.specialRole) {
+            newEmbed.addField('\u200b', `❓ ${helpDesk.specialQuestion}`);
+            await hdMessage.react('❓');
+        }
         hdMessage.edit(newEmbed)
             .then(msg=>{
                 message.client.replyEmbed.setDescription(`Embed correctly updated: [embed](${msg.url})`);

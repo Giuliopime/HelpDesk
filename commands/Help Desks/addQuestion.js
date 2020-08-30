@@ -14,8 +14,8 @@ module.exports = {
     // Command Category
     helpdesk: true,
     async execute(data, member, message, args, index) {
-        if(data.helpDesks[index].embedProperties.fields.length >= 25) {
-            message.client.errorEmbed.setDescription('You already have 25 questions and that\'s the limit for all Discord Embeds.\nYou can delete some questions with `hd?delQuestion`.');
+        if(data.helpDesks[index].embedProperties.fields.length >= 9) {
+            message.client.errorEmbed.setDescription('I don\'t currently support more than 9 questions.');
             return message.channel.send(message.client.errorEmbed);
         }
         let parameters = args.join(' ').split('|||')
@@ -33,7 +33,7 @@ module.exports = {
             message.client.errorEmbed.setDescription('The answer can\'t be longer than 500 characters.');
             return message.channel.send(message.client.errorEmbed);
         }
-        data.helpDesks[index].embedProperties.fields.push({name: '\u200b', value: question, inline: false});
+        data.helpDesks[index].embedProperties.fields.push(question);
         data.helpDesks[index].fieldsReplies.push(answer);
         await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: { ['helpDesks.'+index]: data.helpDesks[index] }});
         message.client.replyEmbed.setDescription('Question added. Use `hd?update` to apply the changes.');

@@ -31,7 +31,7 @@ module.exports = {
 
 
 		const statsEmbed = new Discord.MessageEmbed()
-			.setColor('#000')
+			.setColor(message.client.mainColor)
 			.setTitle('**Help Desk Statistics**')
 			.setDescription(`**>** Server Count: \`${totalGuilds}\`` +
                     `\n**>** User Count: \`${totalUsers}\`` +

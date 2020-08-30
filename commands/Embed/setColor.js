@@ -12,7 +12,7 @@ module.exports = {
     embed: true,
     async execute(data, member, message, args, index) {
         let text = args[0];
-        if(args[0] === '{delete}') text = message.guild.me.displayColor;
+        if(args[0] === '{delete}') text = message.guild.me.displayHexColor;
         await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.color']: text } });
         message.client.replyEmbed.setDescription('Footer set.\nUse `hd?update` to apply the changes to the #help-desk embed.');
         await message.channel.send(message.client.replyEmbed);

@@ -10,7 +10,7 @@ module.exports = {
 			connectTimeoutMS: 10000,
 			family: 4,
 		};
-		mongoose.connect('mongodb://localhost:27017/HelpDesk', dbOptions);
+		mongoose.connect('mongodb://localhost:27017/HelpDeskTester', dbOptions);
 		mongoose.set('useFindAndModify', false);
 		mongoose.Promise = global.Promise;
 

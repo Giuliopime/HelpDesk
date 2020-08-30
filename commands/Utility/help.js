@@ -13,7 +13,7 @@ module.exports = {
 	async execute(data, member, message, args) {
 		const prefix = 'hd?';
 		let helpEmbed = new Discord.MessageEmbed()
-			.setColor('#000000');
+			.setColor(message.client.mainColor);
 
 		// Command Help
 		const command = args[0] ? message.client.commands.get(args[0].toLowerCase()) || message.client.commands.find(c => c.aliases && c.aliases.includes(args[0].toLowerCase())) : undefined;

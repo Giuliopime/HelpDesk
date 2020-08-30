@@ -12,7 +12,7 @@ module.exports = {
 	utility: true,
 	async execute(data, member, message) {
 		const inviteEmbed = new Discord.MessageEmbed()
-			.setColor('#000000')
+			.setColor(message.client.mainColor)
 			.setTitle('**Click Here to invite Help Desk to your server!**')
 			.setURL('https://discord.com/oauth2/authorize?client_id=739796627681837067&scope=bot&permissions=268954832');
 		await message.channel.send(inviteEmbed);

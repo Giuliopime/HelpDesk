@@ -86,7 +86,11 @@ client.mongoose.init();
 
 
 // Client useful properties
-
+//Emojis
+client.helpDeskEmojis = {0: '0⃣', 1: '1⃣',
+	2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣',
+	6: '6⃣', 7: '7⃣', 8: '8⃣', 9: '9⃣',
+	10: '🔟', '?': '❓'}
 // Set of permissions required for Help Desk in order to work
 client.requiredPermissions = ['MANAGE_CHANNELS', 'ADD_REACTIONS', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES', 'ATTACH_FILES', 'MENTION_EVERYONE'];
 
@@ -97,6 +101,8 @@ client.stoppedServers = ['264445053596991498'];
 // Commands cooldown
 client.cooldowns = new Discord.Collection();
 
+// Colors
+client.mainColor = '#4cc714';
 // Default Embeds for messages responses
 client.failureEmbed = new Discord.MessageEmbed()
 	.setColor('#ed0c0c')
@@ -109,7 +115,7 @@ client.errorEmbed = new Discord.MessageEmbed()
 	.setFooter('For support use hd?help');
 
 client.replyEmbed = new Discord.MessageEmbed()
-	.setColor('#000')
+	.setColor(client.mainColor)
 	.setFooter('type \'hd?help\' for support');
 
 // Useful functions

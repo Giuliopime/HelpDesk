@@ -10,75 +10,6 @@ module.exports = async (client, message) => {
 			member = message.member;
 		}
 
-		// #HELP-DESKS
-		// Help-desk channels cache
-		let hdChannels;
-		if(guildID) {
-			const hds = client.helpDesksCache;
-			if (!hds.has(guildID)) {
-				data = await client.guildSchema.findOne({guildID: guildID});
-				if (!data) {
-					// Create the new guild object for the database
-					const newGuild = new client.guildSchema({
-						guildID: guildID,
-						helpDesks: [],
-					});
-					data = newGuild;
-					// Save the object in the database
-					await newGuild.save().catch(err => console.log(err));
-				}
-				hds.set(guildID, data.helpDesks.map(helpDesk => helpDesk.channelID));
-			}
-			const guildhds = hds.get(guildID);
-			if (guildhds) hdChannels = guildhds;
-			if (hdChannels.includes(message.channel.id)) {
-				if(!data) {
-					data = await client.guildSchema.findOne({guildID: message.guild.id});
-					if(!data) {
-						data = {
-							guildID: guildID,
-							helpDesks: [],
-						}
-						// Create the new guild object for the database
-						const newGuild = new client.guildSchema(data);
-						// Save the object in the database
-						await newGuild.save().catch(err => console.log(err));
-					}
-				}
-				const deskIndex = data.helpDesks.findIndex(hd => hd.channelID === message.channel.id);
-				if(deskIndex > -1) {
-					const helpDesk = data.helpDesks[deskIndex];
-					if(!isNaN(message.content)) {
-						const reply = helpDesk.fieldsReplies[message.content - 1];
-						if(reply) {
-							let embed = new Discord.MessageEmbed().setDescription(reply).setColor(message.guild.me.displayHexColor);
-							message.author.send(embed)
-								.catch(() => message.channel.send(`<@${message.author.id}> make sure your DMs are open.\n*If you don't know how check out this article <https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings->*`).then(msg => setTimeout(() => msg.delete(), 10000)));
-						}
-					}
-					else if(message.content === helpDesk.specialTrigger) {
-						const roleToAssign = message.guild.roles.resolve(helpDesk.specialRole);
-						if(roleToAssign) {
-							message.member.roles.add(roleToAssign.id)
-								.then(()=>{
-									let embed = new Discord.MessageEmbed().setDescription(`I assigned you the @${roleToAssign.name} role in ${message.guild.name}.`).setColor(message.guild.me.displayHexColor);
-									message.author.send(embed)
-										.catch(()=>message.channel.send(`<@${message.author.id}> make sure your DMs are open.\n*If you don't know how check out this article <https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings->*`)
-											.then(msg => setTimeout(()=>msg.delete(), 15000)));
-								})
-								.catch(() => {
-									client.errorEmbed.setDescription(`I\'m unable to assign the <@&${roleToAssign.id}> role. Make sure I have \`Manage_Roles\` permissions and that the role I have to assign is under the Help Desk role in the server role hierarchy.\nLearn more with [this article](https://support.discord.com/hc/en-us/articles/214836687-Gestione-dei-Ruoli-101).`);
-									message.channel.send(client.errorEmbed)
-										.then(msg => setTimeout(() => msg.delete(), 200000))
-								})
-						}
-					}
-					await message.delete();
-				}
-			}
-		}
-
-		// COMMANDS
 		let prefix = 'hd?';
 		let args = [];
 
@@ -197,7 +128,7 @@ module.exports = async (client, message) => {
 			if (desks.length !== 1) {
 				let choiceEmbed = new Discord.MessageEmbed()
 					.setTitle('#Help-Desk Picker')
-					.setColor(message.guild.me.displayHexColor);
+					.setColor(client.mainColor);
 				choiceEmbed.setDescription(`*<@${message.author.id}> choose one of this Help Desks:*`);
 				for (let i = 0; i < desks.length; i++) {
 					const desk = message.guild.channels.resolve(desks[i].channelID);

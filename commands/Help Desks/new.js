@@ -21,6 +21,16 @@ module.exports = {
         let hdChannel = await message.guild.channels.create('help-desk', {
             topic: 'Help Desk powered by the Official Help Desk Bot -> \'hd?help\' for info.',
             rateLimitPerUser: 5,
+            permissionOverwrites: [
+                {
+                    id: message.guild.id,
+                    deny: ["ADD_REACTIONS","SEND_MESSAGES"],
+                },
+                {
+                    id: message.client.user.id,
+                    allow: ["ADD_REACTIONS", "SEND_MESSAGES"],
+                }
+            ]
         })
         let hdEmbed = new Discord.MessageEmbed()
             .setTitle('[Title]')
@@ -28,15 +38,18 @@ module.exports = {
             .setThumbnail(message.client.user.displayAvatarURL())
             .setDescription('[Description]')
             .addFields(
-                {name: '\u200b', value: '`1.` [Question example]'},
-                    {name: '\u200b', value: '`2.` [Question 2 example]'},
-                    {name: '\u200b', value: '`?` [Special question which you can use to assign roles]'}
+                {name: '\u200b', value: '1⃣ [Question example]'},
+                    {name: '\u200b', value: '2⃣ [Question 2 example]'},
+                    {name: '\u200b', value: '❓ [Special question which you can use to assign roles]'}
             )
             .setImage(message.client.user.displayAvatarURL())
             .setFooter('[Footer]')
             .setColor(message.guild.me.displayHexColor);
 
-        let hdMessage = await hdChannel.send(hdEmbed)
+        let hdMessage = await hdChannel.send(hdEmbed);
+        await hdMessage.react('1⃣');
+        await hdMessage.react('2⃣');
+        await hdMessage.react('❓');
         const helpDesk = {
             channelID: hdChannel.id,
             messageID: hdMessage.id,
@@ -48,8 +61,8 @@ module.exports = {
                 timestamp: null,
                 color: message.guild.me.displayColor,
                 fields: [
-                    {name: '\u200b', value: '[Question example]', inline: false},
-                    {name: '\u200b', value: '[Question 2 example]', inline: false},
+                    '[Question example]',
+                    '[Question 2 example]',
                 ],
                 thumbnail: {
                     url: message.client.user.displayAvatarURL(),
@@ -79,7 +92,7 @@ module.exports = {
         // Update bot help desks cache
         message.client.helpDesksCache.set(message.guild.id, data.helpDesks.map(helpDesk => helpDesk.channelID));
         // Reply to the command
-        let replyEmbed = new Discord.MessageEmbed().setDescription(`I created a new <#${hdChannel.id}>.\nUse \`hd?tutorial\` to learn how to personalize it.`).setColor('#000');
+        let replyEmbed = new Discord.MessageEmbed().setDescription(`I created a new <#${hdChannel.id}>.\nUse \`hd?tutorial\` to learn how to personalize it.`).setColor(message.client.mainColor);
         await message.channel.send(replyEmbed);
     },
 };

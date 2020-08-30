@@ -39,7 +39,6 @@ module.exports = {
         }
         data.helpDesks[index].specialQuestion = question;
         data.helpDesks[index].specialRole = role.id;
-        console.log(data.helpDesks[index]);
         await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: { ['helpDesks.'+index]: data.helpDesks[index] }});
         message.client.replyEmbed.setDescription('Special Question added. Use `hd?update` to apply the changes.');
         await message.channel.send(message.client.replyEmbed);
