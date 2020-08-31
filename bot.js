@@ -54,6 +54,7 @@ client.once('ready', async () => {
 	setInterval(async () => {
 		await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
 	}, 3600000);
+	client.errorChannel = client.channels.cache.get('749929244976742420');
 });
 
 // Listen to raw events to emit messageReactionAdd event on uncached messages
@@ -79,6 +80,13 @@ client.on('raw', async event => {
 
 	client.emit('messageReactionAdd', reaction, user);
 });
+client.on('error', async err => {
+	console.log(err);
+	if(client.errorChannel) {
+		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
+		await client.errorChannel.send(client.errorLogEmbed);
+	}
+})
 // Login into Discord
 client.login(token);
 // Connect to mongoDB
@@ -86,6 +94,19 @@ client.mongoose.init();
 
 
 // Client useful properties
+// Error logs channel
+client.errorChannel = undefined;
+client.errorLogEmbed = new Discord.MessageEmbed()
+	.setColor('#ed0c0c');
+client.errorReport = async function report(err, message, channel) {
+	console.log(err);
+	if(channel) await channel.send(client.failureEmbed).catch();
+	if(client.errorChannel) {
+		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
+		await client.errorChannel.send(client.errorLogEmbed);
+	}
+	client.errorLogEmbed.fields = [];
+}
 //Emojis
 client.helpDeskEmojis = {0: '0⃣', 1: '1⃣',
 	2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣',
@@ -107,6 +128,7 @@ client.mainColor = '#4cc714';
 client.failureEmbed = new Discord.MessageEmbed()
 	.setColor('#ed0c0c')
 	.setTitle('\\❗  **Help Desk Failure** \\❗')
+	.setDescription('An error occurred, devs are already tracking the issue.')
 	.setFooter('For support use hd?help');
 
 client.errorEmbed = new Discord.MessageEmbed()

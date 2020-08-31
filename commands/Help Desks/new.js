@@ -11,6 +11,8 @@ module.exports = {
     guildOnly: true,
     // Command Category
     helpdesk: true,
+    // Permissions
+    globalPerms: ['ADD_REACTIONS', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL', 'MENTION_EVERYONE'],
     async execute(data, member, message) {
         await message.client.guildSchema.updateOne({ guildID: message.guild.id }, { $set:{ helpDesks: [] }});
         // Maximum amount of help desks reached
@@ -20,7 +22,6 @@ module.exports = {
         }
         let hdChannel = await message.guild.channels.create('help-desk', {
             topic: 'Help Desk powered by the Official Help Desk Bot -> \'hd?help\' for info.',
-            rateLimitPerUser: 5,
             permissionOverwrites: [
                 {
                     id: message.guild.id,
@@ -28,7 +29,7 @@ module.exports = {
                 },
                 {
                     id: message.client.user.id,
-                    allow: ["ADD_REACTIONS", "SEND_MESSAGES"],
+                    allow: ['ADD_REACTIONS', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL', 'MENTION_EVERYONE'],
                 }
             ]
         })

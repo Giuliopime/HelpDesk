@@ -12,6 +12,8 @@ module.exports = {
     chooseDesk: true,
     // Command Category
     helpdesk: true,
+    //Permissions
+    globalPerms: ['MANAGE_ROLES'],
     async execute(data, member, message, args, index) {
         let helpDesk = data.helpDesks[index];
         const hdChannel = await message.guild.channels.resolve(helpDesk.channelID);
@@ -19,11 +21,16 @@ module.exports = {
             message.client.errorEmbed.setDescription('I couldn\'t find the #help-desk channel, if it has been deleted use the `hd?fix` command');
             return message.channel.send(message.client.errorEmbed);
         }
+        let requirePerms = ['ADD_REACTIONS', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL', 'MENTION_EVERYONE'];
+        if(!hdChannel.permissionsFor(message.guild.me.id).has(requirePerms)) {
+            return message.channel.send(message.client.errorEmbed.setDescription(`I'm missing some important permissions in <#${hdChannel.id}>:\n**>** ${requirePerms.filter(permission => !hdChannel.permissionsFor(message.guild.me.id).has(permission)).join('\n**>** ')}`));
+        }
         const hdMessage = await hdChannel.messages.fetch(helpDesk.messageID);
         if(!hdMessage) {
             message.client.errorEmbed.setDescription('I couldn\'t find the #help-desk message embed, if it has been deleted use the `hd?fix` command');
             return message.channel.send(message.client.errorEmbed);
         }
+        let tempMessage = await message.channel.send('Loading the help desk...')
         await hdMessage.reactions.removeAll();
         const embedProperties = helpDesk.embedProperties;
         let newEmbed = new Discord.MessageEmbed();
@@ -51,9 +58,10 @@ module.exports = {
             await hdMessage.react('❓');
         }
         hdMessage.edit(newEmbed)
-            .then(msg=>{
+            .then(async msg=>{
+                if(tempMessage) await tempMessage.delete().catch();
                 message.client.replyEmbed.setDescription(`Embed correctly updated: [embed](${msg.url})`);
-                message.channel.send(message.client.replyEmbed);
+                await message.channel.send(message.client.replyEmbed);
             })
     },
 };

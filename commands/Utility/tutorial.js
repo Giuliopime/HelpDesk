@@ -10,8 +10,9 @@ module.exports = {
     guildOnly: true,
     // Command Category
     utility: true,
+    // Permissions needed
+    perms: ['ADD_REACTIONS', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'EMBED_LINKS'],
     async execute(data, member, message) {
-
         // Define the arrays of the commands separed by category
         const pages = [' ', 'Create an #help-desk', 'Personalize the Embed Message', 'Add Questions', 'Special Question', 'Advanced Settings Editing'];
         let page = 1;
@@ -79,7 +80,7 @@ module.exports = {
                 if (page === 2) {
                     tutorialEmbed
                         .setTitle(pages[page-1])
-                        .setDescription('**First thing first let\'s create a new #help-desk, simply use the command `hd?new`.**\n\n*This will generate an #help-desk channel as well as a template embed (which is a particular type of message) that you will be able to tweak in the next section.*\n\n**>** Remember to keep the channel slowmode to prevent users from spamming the help-desk.\n\nNow you can move on to the next sections.')
+                        .setDescription('**First thing first let\'s create a new #help-desk, simply use the command `hd?new`.**\n\n*This will generate an #help-desk channel as well as a template embed (which is a particular type of message) that you will be able to tweak in the next section.*\n\n**>** Make sure to not change the bot permissions in the channel settings, this could make the bot not function correctly.\n\nNow you can move on to the next section.')
                     tutorialEmbed.image = undefined;
                     tutorialEmbed.thumbnail = undefined;
                     tutorialEmbed.fields = [];
@@ -88,7 +89,7 @@ module.exports = {
                     tutorialEmbed
                         .setTitle(pages[page-1])
                         .setDescription('**Let\'s modify the help-desk embed now.**\n\n**>** You can find a list of commands to do that using `hd?help embed`.\n**>** You can see how embeds are structured in the image below.\n\n*(Quick note: The thumbnail of the embed is the image in the upper right corner)*')
-                        .setImage('https://i.ibb.co/DrMmvwg/embed.png')
+                        .setImage('https://i.ibb.co/5kKpQrs/embed-Example.png')
                         .setThumbnail(message.client.user.displayAvatarURL());
                     tutorialEmbed.fields = [];
                 }
@@ -103,7 +104,7 @@ module.exports = {
                 if (page === 5) {
                     tutorialEmbed
                         .setTitle(pages[page-1])
-                        .setDescription('**The *Special Question* is a cool kind of question: when the user queries it (sending `?` in the #help-desk channel) a role will be applied to the user.**\n\n**>** You can learn how to add a *Special Question* using `hd?help specialQuestion`\n**>** You will always be able to delete it with `hd?delSpecialQuestion`.\n\nIn the next sections you can find out how to export and load the help-desk settings.');
+                        .setDescription('**The *Special Question* is a cool kind of question: when the user queries it a role will be applied to the user.**\n\n**>** You can learn how to add a *Special Question* using `hd?help specialQuestion`\n**>** You will always be able to delete it with `hd?delSpecialQuestion`.\n\nIn the next sections you can find out how to export and load the help-desk settings.');
                     tutorialEmbed.image = undefined;
                     tutorialEmbed.thumbnail = undefined;
                     tutorialEmbed.fields = [];

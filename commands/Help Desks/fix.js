@@ -7,7 +7,7 @@ module.exports = {
 	// Basic checks
 	guildOnly: true,
 	// Command Category
-	helpdesk: true,
+	dev: true,
 	async execute(data, member, message) {
 
 	},

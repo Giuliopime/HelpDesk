@@ -9,6 +9,8 @@ module.exports = {
     guildOnly: true,
     // Command Category
     embed: true,
+    // Permissions needed
+    perms: ['EMBED_LINKS'],
     async execute(data, member, message, args, index) {
         let text = Date.now();
         if(args[0] === '{delete}') text = undefined;

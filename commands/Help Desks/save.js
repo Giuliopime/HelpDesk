@@ -12,6 +12,8 @@ module.exports = {
     chooseDesk: true,
     // Command Category
     helpdesk: true,
+    // Permissions needed
+    perms: ['ATTACH_FILES'],
     async execute(data, member, message, args, deskIndex) {
         let helpDesk = data.helpDesks[deskIndex];
         const fileName = './helpDesk_'+helpDesk.channelID+'.json';

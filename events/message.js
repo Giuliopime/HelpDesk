@@ -12,6 +12,7 @@ module.exports = async (client, message) => {
 
 		let prefix = 'hd?';
 		let args = [];
+		let deskIndex = 0;
 
 		// Check if bot is mentioned
 		let botMentioned = false;
@@ -79,14 +80,19 @@ module.exports = async (client, message) => {
 
 		// Bot permissions needed
 		// Send Messages
-		if (guildID && !message.guild.me.hasPermission('SEND_MESSAGES')) {
-			client.failureEmbed.setDescription(`*I don\'t have SEND_MESSAGES permission in ${member.guild.name}.*`);
+		if (guildID && !message.channel.permissionsFor(message.guild.me.id).has('SEND_MESSAGES')) {
+			client.failureEmbed.setDescription(`I don\'t have SEND_MESSAGES permission in *${member.guild.name}* server. Please report this to the server moderators.`);
 			message.author.send(client.failureEmbed).catch();
 			return;
 		}
 		// Other permissions
-		if (guildID && !client.requiredPermissions.every(permission => message.guild.me.permissions.has(permission))) {
-			client.failureEmbed.setDescription(`**I'm missing some important permissions, make sure to grant them in server settings:**\n**>** ${client.requiredPermissions.filter(permission => !message.guild.me.permissions.has(permission)).join('\n**>** ')}`);
+		if (guildID && command.perms && !message.channel.permissionsFor(message.guild.me.id).has(command.perms)) {
+			client.failureEmbed.setDescription(`I'm missing some essential permissions to run this command.\nMake sure to grant them in this **channel settings**:\n**>** ${command.perms.filter(permission => !message.channel.permissionsFor(message.guild.me.id).has(permission)).join('\n**>** ')}`);
+			await message.channel.send(client.failureEmbed);
+			return;
+		}
+		if (guildID && command.globalPerms && !command.globalPerms.every(permission => message.guild.me.permissions.has(permission))) {
+			client.failureEmbed.setDescription(`I'm missing some important permissions to run this commands.\nMake sure to grant them in **server settings:**\n**>** ${command.globalPerms.filter(permission => !message.guild.me.permissions.has(permission)).join('\n**>** ')}`);
 			await message.channel.send(client.failureEmbed);
 			return;
 		}
@@ -103,7 +109,7 @@ module.exports = async (client, message) => {
 			return client.errorEmbed.setFooter('For support use <>help');
 		}
 
-		if ((command.helpDesks || command.embed) && !isModerator) {
+		if ((command.helpdesk || command.embed) && !isModerator) {
 			client.errorEmbed.setDescription(`*<@${message.author.id}> you do not have the required permissions to use this command (Manage Messages).*`);
 			return message.channel.send(client.errorEmbed);
 		}
@@ -117,12 +123,11 @@ module.exports = async (client, message) => {
 			return;
 		}
 		// Commands which require choosing a generator
-		let deskIndex = 0;
 		if (command.chooseDesk) {
 			let desks = data.helpDesks;
 			// If there are no generators return
 			if (desks.length === 0) {
-				client.errorEmbed.setDescription(`*<@${message.author.id}> I haven't found any #help-desk in this server!*\nUse the \`<>tutorial\` command to learn how to create one.*`);
+				client.errorEmbed.setDescription(`*<@${message.author.id}> I haven't found any #help-desk in this server!*\nUse the \`<>tutorial\` command to learn how to create one.`);
 				return message.channel.send(client.errorEmbed);
 			}
 			if (desks.length !== 1) {
@@ -160,9 +165,7 @@ module.exports = async (client, message) => {
 								await command.execute(data, member, message, args, deskIndex);
 							}
 							catch (err) {
-								console.log(err);
-								client.failureEmbed.setDescription(`**Please report this error in my Support Server > <https://discord.gg/4BTXnXu>.**\n\`\`\`javascript\n${err.stack.split("\n").slice(0, 3).join("\n")}\`\`\``);
-								await message.channel.send(client.failureEmbed).catch();
+								await client.errorReport(err, message, message.channel);
 							}
 						});
 					});
@@ -173,9 +176,7 @@ module.exports = async (client, message) => {
 					await command.execute(data, member, message, args, deskIndex);
 				}
 				catch (err) {
-					console.log(err);
-					client.failureEmbed.setDescription(`**Please report this error in my Support Server > <https://discord.gg/4BTXnXu>.**\n\`\`\`javascript\n${err.stack.split("\n").slice(0, 3).join("\n")}\`\`\``);
-					await message.channel.send(client.failureEmbed).catch();
+					await client.errorReport(err, message, message.channel);
 				}
 			}
 		}
@@ -186,15 +187,11 @@ module.exports = async (client, message) => {
 				await command.execute(data, member, message, args, deskIndex);
 			}
 			catch (err) {
-				console.log(err);
-				client.failureEmbed.setDescription(`**Please report this error in my Support Server > <https://discord.gg/4BTXnXu>.**\n\`\`\`javascript\n${err.stack.split("\n").slice(0, 3).join("\n")}\`\`\``);
-				await message.channel.send(client.failureEmbed).catch();
+				await client.errorReport(err, message, message.channel);
 			}
 		}
 	}
 	catch (err) {
-		console.log(err);
-		client.failureEmbed.setDescription(`**Please report this error in my Support Server > <https://discord.gg/4BTXnXu>.**\n\`\`\`javascript\n${err.stack.split("\n").slice(0, 3).join("\n")}\`\`\``);
-		await message.channel.send(client.failureEmbed).catch();
+		await client.errorReport(err, message, message.channel);
 	}
 };
