@@ -103,15 +103,15 @@ module.exports = async (client, message) => {
 		// Check if command requires args
 		if (command.args) {
 			let regexp = command.args;
-			let matchedArgs = regexp.exec(args.join(' '));
-			if(!matchedArgs) {
+			const matched = args.join(' ').match(regexp);
+			if(!matched) {
 				client.errorEmbed.setDescription('*Incorrect usage of the command!*' +
 					`\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``);
 				client.errorEmbed.setFooter(`Type '${prefix}help ${commandName}' for more info`)
 				await message.channel.send(client.errorEmbed);
 				return client.errorEmbed.setFooter('For support use <>help');
 			}
-			args = matchedArgs.slice(1, 10);
+			args = matched.slice(1);
 		}
 
 		if ((command.helpdesk || command.embed) && !isModerator) {
