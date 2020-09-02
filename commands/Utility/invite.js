@@ -4,7 +4,6 @@ module.exports = {
 	// Info
 	name: 'invite',
 	description: 'Invite Astro to upgrade your server experience!',
-	args: false,
 	cooldown: 20,
 	// Basic checks
 	guildOnly: false,

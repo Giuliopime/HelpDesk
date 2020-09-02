@@ -5,8 +5,7 @@ module.exports = {
 	name: 'info',
 	description: 'Gather information about the current status of Help Desk.',
 	aliases: ['stats'],
-	args: false,
-	cooldown: 20,
+	cooldown: 3,
 	// Basic checks
 	guildOnly: false,
 	// Command Category

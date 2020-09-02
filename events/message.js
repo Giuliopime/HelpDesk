@@ -101,12 +101,17 @@ module.exports = async (client, message) => {
 		const isModerator = guildID ? member.hasPermission('MANAGE_MESSAGES') : false;
 
 		// Check if command requires args
-		if (command.args && !args.length) {
-			client.errorEmbed.setDescription('*Incorrect usage of the command!*' +
-				`\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``);
-			client.errorEmbed.setFooter(`Type '${prefix}help ${commandName}' for more info`)
-			await message.channel.send(client.errorEmbed);
-			return client.errorEmbed.setFooter('For support use <>help');
+		if (command.args) {
+			let regexp = command.args;
+			let matchedArgs = regexp.exec(args.join(' '));
+			if(!matchedArgs) {
+				client.errorEmbed.setDescription('*Incorrect usage of the command!*' +
+					`\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``);
+				client.errorEmbed.setFooter(`Type '${prefix}help ${commandName}' for more info`)
+				await message.channel.send(client.errorEmbed);
+				return client.errorEmbed.setFooter('For support use <>help');
+			}
+			args = matchedArgs.slice(1, 10);
 		}
 
 		if ((command.helpdesk || command.embed) && !isModerator) {

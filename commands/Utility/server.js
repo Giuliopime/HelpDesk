@@ -3,7 +3,6 @@ module.exports = {
 	name: 'server',
 	description: 'Get a link to Help Desk\'s Support Server.',
 	aliases: ['support'],
-	args: false,
 	cooldown: 3,
 	// Basic checks
 	guildOnly: false,

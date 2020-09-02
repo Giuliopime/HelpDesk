@@ -4,7 +4,6 @@ module.exports = {
     // Info
     name: 'tutorial',
     description: 'Get started with Help Desk!',
-    args: false,
     cooldown: 20,
     // Basic checks
     guildOnly: true,

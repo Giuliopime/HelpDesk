@@ -4,7 +4,6 @@ module.exports = {
 	// Info
 	name: 'ping',
 	description: 'See Help Desk latency',
-	args: false,
 	cooldown: 10,
 	// Basic checks
 	guildOnly: false,

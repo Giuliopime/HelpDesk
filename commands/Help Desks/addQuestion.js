@@ -5,8 +5,8 @@ module.exports = {
     name: 'addquestion',
     description: 'Add a question to the #help-desk embed',
     aliases: ['aquestion'],
-    args: true,
-    usage: '<question ||| answer>',
+    args: /^(.+?)( *\|\|\| *)(.+)$/,
+    usage: '<question> ||| <answer>',
     cooldown: 5,
     // Basic checks
     guildOnly: true,
@@ -18,23 +18,16 @@ module.exports = {
             message.client.errorEmbed.setDescription('I don\'t currently support more than 9 questions.');
             return message.channel.send(message.client.errorEmbed);
         }
-        let parameters = args.join(' ').split('|||')
-        if(!parameters || !parameters[0] || !parameters[1]) {
-            message.client.errorEmbed.setDescription('You need to provide a question and an answer to the question too.\nFor example `hd?addQuestion Need support? ||| Use the Help Desk!`');
+        if(args[0].length > 1024) {
+            message.client.errorEmbed.setDescription('The question can\'t be longer than 1024 characters.');
             return message.channel.send(message.client.errorEmbed);
         }
-        const question = parameters[0];
-        const answer = parameters[1];
-        if(question.length > 500) {
-            message.client.errorEmbed.setDescription('The question can\'t be longer than 500 characters.');
+        if(args[2].length > 1024) {
+            message.client.errorEmbed.setDescription('The answer can\'t be longer than 1024 characters.');
             return message.channel.send(message.client.errorEmbed);
         }
-        if(answer.length > 500) {
-            message.client.errorEmbed.setDescription('The answer can\'t be longer than 500 characters.');
-            return message.channel.send(message.client.errorEmbed);
-        }
-        data.helpDesks[index].embedProperties.fields.push(question);
-        data.helpDesks[index].fieldsReplies.push(answer);
+        data.helpDesks[index].embedProperties.fields.push(args[0]);
+        data.helpDesks[index].fieldsReplies.push(args[2]);
         await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: { ['helpDesks.'+index]: data.helpDesks[index] }});
         message.client.replyEmbed.setDescription('Question added. Use `hd?update` to apply the changes.');
         await message.channel.send(message.client.replyEmbed);

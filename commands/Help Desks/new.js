@@ -5,7 +5,6 @@ module.exports = {
     name: 'new',
     description: 'Create a new #help-desk channel template.',
     aliases: ['newhd'],
-    args: false,
     cooldown: 5,
     // Basic checks
     guildOnly: true,

@@ -13,41 +13,6 @@ client.mongoose = require('./utils/mongoose');
 client.guildSchema = require('./utils/guildS');
 
 
-// Get all the command files from commands/ and save them in a Discord Collection
-client.commands = new Discord.Collection();
-function getCommands(dir, callback) {
-	fs.readdir(dir, (err, files) => {
-		if (err) throw err;
-		files.forEach((file) => {
-			const filepath = path.join(dir, file);
-			fs.stat(filepath, (err, stats) => {
-				if (stats.isDirectory()) {
-					getCommands(filepath, callback);
-				}
-				else if (stats.isFile() && file.endsWith('.js')) {
-					const command = require(`./${filepath}`);
-					client.commands.set(command.name, command);
-				}
-			});
-		});
-	});
-}
-getCommands('./commands/');
-
-// Events
-// Get all the events file
-const events = requireAll({
-	dirname: __dirname + '/events',
-	filter: /^(?!-)(.+)\.js$/,
-});
-
-// Bind the events to the files
-for (const name in events) {
-	const event = events[name];
-	client.on(name, event.bind(null, client));
-}
-
-client.launch = Date.now();
 client.once('ready', async () => {
 	console.log('Help Desk launched!');
 	await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
@@ -55,6 +20,42 @@ client.once('ready', async () => {
 		await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
 	}, 3600000);
 	client.errorChannel = client.channels.cache.get('749929244976742420');
+
+	// Events
+	// Get all the events file
+	const events = requireAll({
+		dirname: __dirname + '/events',
+		filter: /^(?!-)(.+)\.js$/,
+	});
+
+	// Bind the events to the files
+	for (const name in events) {
+		const event = events[name];
+		client.on(name, event.bind(null, client));
+	}
+
+	client.launch = Date.now();
+
+	// Get all the command files from commands/ and save them in a Discord Collection
+	client.commands = new Discord.Collection();
+	function getCommands(dir, callback) {
+		fs.readdir(dir, (err, files) => {
+			if (err) throw err;
+			files.forEach((file) => {
+				const filepath = path.join(dir, file);
+				fs.stat(filepath, (err, stats) => {
+					if (stats.isDirectory()) {
+						getCommands(filepath, callback);
+					}
+					else if (stats.isFile() && file.endsWith('.js')) {
+						const command = require(`./${filepath}`);
+						client.commands.set(command.name, command);
+					}
+				});
+			});
+		});
+	}
+	getCommands('./commands/');
 });
 
 // Listen to raw events to emit messageReactionAdd event on uncached messages
@@ -101,10 +102,10 @@ client.errorLogEmbed = new Discord.MessageEmbed()
 client.errorReport = async function report(err, message, channel) {
 	console.log(err);
 	if(channel) await channel.send(client.failureEmbed).catch();
-	if(client.errorChannel) {
+	/*if(client.errorChannel) {
 		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
 		await client.errorChannel.send(client.errorLogEmbed);
-	}
+	}*/
 	client.errorLogEmbed.fields = [];
 }
 //Emojis
@@ -139,14 +140,3 @@ client.errorEmbed = new Discord.MessageEmbed()
 client.replyEmbed = new Discord.MessageEmbed()
 	.setColor(client.mainColor)
 	.setFooter('type \'hd?help\' for support');
-
-// Useful functions
-client.isValidURL = function validURL(str) {
-	const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-		'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-		'((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-		'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-		'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-		'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-	return !!pattern.test(str);
-}

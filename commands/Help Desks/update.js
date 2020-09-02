@@ -5,7 +5,6 @@ module.exports = {
     name: 'update',
     description: 'Update the #help-desk embed.',
     aliases: ['hdupdate'],
-    args: false,
     cooldown: 5,
     // Basic checks
     guildOnly: true,
@@ -18,8 +17,7 @@ module.exports = {
         let helpDesk = data.helpDesks[index];
         const hdChannel = await message.guild.channels.resolve(helpDesk.channelID);
         if(!hdChannel) {
-            message.client.errorEmbed.setDescription('I couldn\'t find the #help-desk channel, if it has been deleted use the `hd?fix` command');
-            return message.channel.send(message.client.errorEmbed);
+            return message.channel.send(message.client.errorEmbed.setDescription('I couldn\'t find the #help-desk channel, if it has been deleted use the `hd?fix` command'));
         }
         let requirePerms = ['ADD_REACTIONS', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL', 'MENTION_EVERYONE'];
         if(!hdChannel.permissionsFor(message.guild.me.id).has(requirePerms)) {

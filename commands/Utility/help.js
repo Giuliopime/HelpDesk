@@ -4,7 +4,6 @@ module.exports = {
 	// Info
 	name: 'help',
 	description: 'General info about Help Desk & Commands',
-	args: false,
 	cooldown: 3,
 	// Basic checks
 	guildOnly: false,

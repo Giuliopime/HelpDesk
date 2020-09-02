@@ -5,7 +5,6 @@ module.exports = {
     name: 'save',
     description: 'Get a json template of your help-desk',
     aliases: ['savesettings'],
-    args: false,
     cooldown: 5,
     // Basic checks
     guildOnly: true,

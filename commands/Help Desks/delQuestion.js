@@ -5,7 +5,7 @@ module.exports = {
     name: 'delquestion',
     description: 'Delete a question from the #help-desk embed.',
     aliases: ['dquestion'],
-    args: true,
+    args: /^\d$/,
     usage: '<question number>',
     cooldown: 5,
     // Basic checks
@@ -15,10 +15,6 @@ module.exports = {
     helpdesk: true,
     async execute(data, member, message, args, index) {
         let indexToDelete = args[0];
-        if(isNaN(indexToDelete)) {
-            message.client.errorEmbed.setDescription('You need to provide a correct number.');
-            return message.channel.send(message.client.errorEmbed);
-        }
         indexToDelete--;
         data.helpDesks[index].embedProperties.fields.splice(indexToDelete, 1);
         data.helpDesks[index].fieldsReplies.splice(indexToDelete, 1);

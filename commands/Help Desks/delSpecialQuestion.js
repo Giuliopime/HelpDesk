@@ -2,10 +2,9 @@ const Discord = require("discord.js");
 
 module.exports = {
     // Info
-    name: 'delSpecialQuestion',
+    name: 'delspecialquestion',
     description: 'Delete the special question of the #help-desk embed.',
     aliases: ['dsquestion'],
-    args: false,
     cooldown: 5,
     // Basic checks
     guildOnly: true,

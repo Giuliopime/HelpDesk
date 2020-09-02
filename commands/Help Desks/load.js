@@ -6,7 +6,6 @@ module.exports = {
     name: 'load',
     description: 'Load a json template for your help-desk',
     aliases: ['loadsettings'],
-    args: false,
     cooldown: 5,
     // Basic checks
     guildOnly: true,
