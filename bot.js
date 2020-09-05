@@ -8,54 +8,77 @@ const { token } = require('./config.json');
 // Create bot client
 const client = new Discord.Client();
 
+// Bot API
+const express = require('express');
+const app = express();
+const port = 7000;
+module.exports.client = client;
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+// Set up the routes
+const routes = require('./api/routes/routes');
+routes(app);
+// Invalid routes
+app.use((req, res) => {
+	res.status(404).send({url: req.originalUrl + ' not found'});
+});
+
 // Used to connect to mongoDB
 client.mongoose = require('./utils/mongoose');
 client.guildSchema = require('./utils/guildS');
 
+// Events
+// Get all the events file
+const events = requireAll({
+	dirname: __dirname + '/events',
+	filter: /^(?!-)(.+)\.js$/,
+});
+
+// Bind the events to the files
+for (const name in events) {
+	const event = events[name];
+	client.on(name, event.bind(null, client));
+}
+
+// Get all the command files from commands/ and save them in a Discord Collection
+client.commands = new Discord.Collection();
+function getCommands(dir, callback) {
+	fs.readdir(dir, (err, files) => {
+		if (err) throw err;
+		files.forEach((file) => {
+			const filepath = path.join(dir, file);
+			fs.stat(filepath, (err, stats) => {
+				if (stats.isDirectory()) {
+					getCommands(filepath, callback);
+				}
+				else if (stats.isFile() && file.endsWith('.js')) {
+					const command = require(`./${filepath}`);
+					client.commands.set(command.name, command);
+				}
+			});
+		});
+	});
+}
+getCommands('./commands/');
 
 client.once('ready', async () => {
 	console.log('Help Desk launched!');
+
+	// Update status
 	await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
 	setInterval(async () => {
 		await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
 	}, 3600000);
+
+	// Get the error Channel
 	client.errorChannel = client.channels.cache.get('749929244976742420');
-
-	// Events
-	// Get all the events file
-	const events = requireAll({
-		dirname: __dirname + '/events',
-		filter: /^(?!-)(.+)\.js$/,
-	});
-
-	// Bind the events to the files
-	for (const name in events) {
-		const event = events[name];
-		client.on(name, event.bind(null, client));
-	}
 
 	client.launch = Date.now();
 
-	// Get all the command files from commands/ and save them in a Discord Collection
-	client.commands = new Discord.Collection();
-	function getCommands(dir, callback) {
-		fs.readdir(dir, (err, files) => {
-			if (err) throw err;
-			files.forEach((file) => {
-				const filepath = path.join(dir, file);
-				fs.stat(filepath, (err, stats) => {
-					if (stats.isDirectory()) {
-						getCommands(filepath, callback);
-					}
-					else if (stats.isFile() && file.endsWith('.js')) {
-						const command = require(`./${filepath}`);
-						client.commands.set(command.name, command);
-					}
-				});
-			});
-		});
-	}
-	getCommands('./commands/');
+	//API
+	app.listen(port);
+	console.log('RESTful API server for Help Desk running on port ' + port);
 });
 
 // Listen to raw events to emit messageReactionAdd event on uncached messages
@@ -102,10 +125,10 @@ client.errorLogEmbed = new Discord.MessageEmbed()
 client.errorReport = async function report(err, message, channel) {
 	console.log(err);
 	if(channel) await channel.send(client.failureEmbed).catch();
-	/*if(client.errorChannel) {
+	if(client.errorChannel) {
 		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
 		await client.errorChannel.send(client.errorLogEmbed);
-	}*/
+	}
 	client.errorLogEmbed.fields = [];
 }
 //Emojis
@@ -113,13 +136,9 @@ client.helpDeskEmojis = {0: '0⃣', 1: '1⃣',
 	2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣',
 	6: '6⃣', 7: '7⃣', 8: '8⃣', 9: '9⃣',
 	10: '🔟', '?': '❓'}
-// Set of permissions required for Help Desk in order to work
-client.requiredPermissions = ['MANAGE_CHANNELS', 'ADD_REACTIONS', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES', 'ATTACH_FILES', 'MENTION_EVERYONE'];
 
 // Caches
 client.helpDesksCache = new Discord.Collection();
-// Servers where Astro is stopped
-client.stoppedServers = ['264445053596991498'];
 // Commands cooldown
 client.cooldowns = new Discord.Collection();
 

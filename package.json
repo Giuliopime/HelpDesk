@@ -4,19 +4,23 @@
   "description": "The best Discord Bot for #help-desks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {},
   "author": "Giulio Pimenoff Verdolin",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "discord.js": "^12.2.0",
+    "express": "^4.17.1",
     "mongoose": "^5.9.27",
     "node-fetch": "^2.6.0",
     "require-all": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "nodemon": "^2.0.4"
   }
 }
