@@ -8,7 +8,7 @@ const { token } = require('./config.json');
 // Create bot client
 const client = new Discord.Client();
 
-// Bot API
+/* Bot API
 const express = require('express');
 const app = express();
 const port = 7000;
@@ -22,7 +22,7 @@ routes(app);
 // Invalid routes
 app.use((req, res) => {
 	res.status(404).send({url: req.originalUrl + ' not found'});
-});
+});*/
 
 // Used to connect to mongoDB
 client.mongoose = require('./utils/mongoose');
@@ -76,9 +76,9 @@ client.once('ready', async () => {
 
 	client.launch = Date.now();
 
-	//API
+	/*API
 	app.listen(port);
-	console.log('RESTful API server for Help Desk running on port ' + port);
+	console.log('RESTful API server for Help Desk running on port ' + port);*/
 });
 
 // Listen to raw events to emit messageReactionAdd event on uncached messages
