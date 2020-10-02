@@ -36,7 +36,7 @@ module.exports = {
             const Filter = (reaction, user) => (reaction.emoji.name === beforeEmoji || reaction.emoji.name === nextEmoji || reaction.emoji.name === stopEmoji) && user.id === message.author.id && user.id !== message.client.user.id;
             const otherFilter = (reaction, user) => (reaction.emoji.name !== beforeEmoji && reaction.emoji.name !== nextEmoji && reaction.emoji.name !== stopEmoji) || (user.id !== message.author.id && user.id !== message.client.user.id);
 
-            const update = msg.createReactionCollector(Filter, { time: 60000 });
+            const update = msg.createReactionCollector(Filter, { time: 600000 });
             const other = msg.createReactionCollector(otherFilter, { time: 600000 });
 
             let time = Date.now();

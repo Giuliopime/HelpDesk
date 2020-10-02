@@ -5,7 +5,7 @@ module.exports = {
     name: 'delquestion',
     description: 'Delete a question from the #help-desk embed.',
     aliases: ['dquestion'],
-    args: /^\d$/,
+    args: /^(\d)$/,
     usage: '<question number>',
     cooldown: 5,
     // Basic checks

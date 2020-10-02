@@ -48,6 +48,10 @@ module.exports = async (client, reaction, user) =>  {
         }
         if (isNaN(fieldIndex)) return;
 
+        // Global cooldown
+        const isOnCooldown = await client.checkGCD(user.id);
+        if(isOnCooldown) return;
+
         // Channel cache
         const guild = reaction.message.guild;
         const guildID = guild.id;

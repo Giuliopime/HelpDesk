@@ -3,7 +3,7 @@ module.exports = {
     name: 'setdescription',
     description: 'Set a description to for the #help-desk embed',
     aliases: ['sdescription'],
-    args: /.+/,
+    args: /(.+)/,
     usage: '<description / {delete} to remove>',
     cooldown: 5,
     // Basic checks

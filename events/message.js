@@ -2,17 +2,17 @@ const Discord = require('discord.js');
 
 module.exports = async (client, message) => {
 	try {
-		if (message.author.bot) return;
+		if (message.author.bot || !message.guild) return;
 
-		let guildID, member, data;
-		if (message.channel.type === 'text') {
-			guildID = message.guild.id;
-			member = message.member;
-		}
+		let guildID = message.guild.id, member = message.member, data;
 
 		let prefix = 'hd?';
 		let args = [];
 		let deskIndex = 0;
+
+		// One second global cool down cache
+		const isOnCooldown = await client.checkGCD(member.id);
+		if(isOnCooldown) return;
 
 		// Check if bot is mentioned
 		let botMentioned = false;
@@ -91,7 +91,7 @@ module.exports = async (client, message) => {
 			await message.channel.send(client.failureEmbed);
 			return;
 		}
-		if (guildID && command.globalPerms && !command.globalPerms.every(permission => message.guild.me.permissions.has(permission))) {
+		if (guildID && command.globalPerms && !message.guild.me.permissions.has(command.globalPerms)) {
 			client.failureEmbed.setDescription(`I'm missing some important permissions to run this commands.\nMake sure to grant them in **server settings:**\n**>** ${command.globalPerms.filter(permission => !message.guild.me.permissions.has(permission)).join('\n**>** ')}`);
 			await message.channel.send(client.failureEmbed);
 			return;
@@ -112,6 +112,7 @@ module.exports = async (client, message) => {
 				return client.errorEmbed.setFooter('For support use <>help');
 			}
 			args = matched.slice(1);
+			console.log(args)
 		}
 
 		if ((command.helpdesk || command.embed) && !isModerator) {

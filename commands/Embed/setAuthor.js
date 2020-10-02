@@ -3,7 +3,7 @@ module.exports = {
     name: 'setauthor',
     description: 'Set an author to for the #help-desk embed',
     aliases: ['sauthor'],
-    args: /.+/,
+    args: /(.+)/,
     usage: '<author> or <{delete}> to remove',
     cooldown: 5,
     // Basic checks

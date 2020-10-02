@@ -3,7 +3,7 @@ module.exports = {
     name: 'setfooter',
     description: 'Set a footer to for the #help-desk embed',
     aliases: ['sfooter'],
-    args: /.+/,
+    args: /(.+)/,
     usage: '<footer / {delete} to remove>',
     cooldown: 5,
     // Basic checks

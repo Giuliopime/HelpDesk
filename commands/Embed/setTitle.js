@@ -3,7 +3,7 @@ module.exports = {
     name: 'settitle',
     description: 'Set a title to for the #help-desk embed',
     aliases: ['stitle'],
-    args: /.+/,
+    args: /(.+)/,
     usage: '<title / {delete} to remove>',
     cooldown: 5,
     // Basic checks

@@ -7,34 +7,18 @@ const requireAll = require('require-all');
 const { token } = require('./config.json');
 // Create bot client
 const client = new Discord.Client();
-
-/* Bot API
-const express = require('express');
-const app = express();
-const port = 7000;
-module.exports.client = client;
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// Set up the routes
-const routes = require('./api/routes/routes');
-routes(app);
-// Invalid routes
-app.use((req, res) => {
-	res.status(404).send({url: req.originalUrl + ' not found'});
-});*/
+const { caches } = require('./caches');
+client.caches = caches;
 
 // Used to connect to mongoDB
 client.mongoose = require('./utils/mongoose');
 client.guildSchema = require('./utils/guildS');
-
 // Events
 // Get all the events file
 const events = requireAll({
 	dirname: __dirname + '/events',
 	filter: /^(?!-)(.+)\.js$/,
 });
-
 // Bind the events to the files
 for (const name in events) {
 	const event = events[name];
@@ -75,10 +59,6 @@ client.once('ready', async () => {
 	client.errorChannel = client.channels.cache.get('749929244976742420');
 
 	client.launch = Date.now();
-
-	/*API
-	app.listen(port);
-	console.log('RESTful API server for Help Desk running on port ' + port);*/
 });
 
 // Listen to raw events to emit messageReactionAdd event on uncached messages
@@ -110,9 +90,9 @@ client.on('error', async err => {
 		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
 		await client.errorChannel.send(client.errorLogEmbed);
 	}
-})
+});
 // Login into Discord
-client.login(token);
+client.login(token).catch(console.error);
 // Connect to mongoDB
 client.mongoose.init();
 
@@ -130,6 +110,17 @@ client.errorReport = async function report(err, message, channel) {
 		await client.errorChannel.send(client.errorLogEmbed);
 	}
 	client.errorLogEmbed.fields = [];
+}
+client.checkGCD = async function(userID) {
+	// One second global cooldown cache
+	const GCD = await client.caches.getGCD(userID);
+	if(!GCD) {
+		await client.caches.setGCD([userID, Date.now()]);
+		setTimeout(async ()=> await client.caches.delGCD(userID), 1000);
+		return false;
+	}
+	else if(Date.now() - GCD < 1000) return true;
+	return false;
 }
 //Emojis
 client.helpDeskEmojis = {0: '0⃣', 1: '1⃣',
