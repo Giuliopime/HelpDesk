@@ -1,9 +1,11 @@
+// Node Module
 const mongoose = require('mongoose');
 
+// Set the schema for guild settings and export it
 const guildSchema = mongoose.Schema({
-	// Server info
+	// Server ID
 	guildID: String,
-	// Help Desks
+	// #help-desks
 	helpDesks: Array,
 });
 

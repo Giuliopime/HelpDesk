@@ -1,25 +1,26 @@
 {
-  "name": "astro",
+  "name": "help-desk",
   "version": "1.0.0",
-  "description": "The best Discord Bot for #help-desks",
+  "description": "The best Discord Bot to create an #help-desk for your Discord Server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "repository": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Giuliopime/helpdesk"
+  },
   "author": "Giulio Pimenoff Verdolin",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^12.2.0",
     "mongoose": "^5.9.27",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "redis": "^3.0.2",
     "require-all": "^3.0.0"
   },
   "devDependencies": {
-    "eslint": "^7.6.0",
-    "eslint-config-google": "^0.14.0",
     "nodemon": "^2.0.4"
   }
 }

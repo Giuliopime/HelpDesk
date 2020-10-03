@@ -1,31 +1,46 @@
-// Modules
+/*
+Node Modules
+Use 'npm i' to install them
+ */
 const Discord = require('discord.js');
 const path = require('path');
 const fs = require('fs');
 const requireAll = require('require-all');
-// Bot token
+
+
+/*
+Bot Discord Token
+You can create your own bot and use its token,
+you can do that on https://discord.com/developers/applications
+ */
 const { token } = require('./config.json');
-// Create bot client
+
+
+// Initialize Bot Client
 const client = new Discord.Client();
-const { caches } = require('./caches');
+
+// Load Redis Caches and bind them to the client as a property
+const { caches } = require('./utils/caches');
 client.caches = caches;
 
-// Used to connect to mongoDB
+// Utils to connect to mongoDB and interact with the guildSettings schema
 client.mongoose = require('./utils/mongoose');
 client.guildSchema = require('./utils/guildS');
-// Events
+
+
+// Bot Events
 // Get all the events file
 const events = requireAll({
 	dirname: __dirname + '/events',
 	filter: /^(?!-)(.+)\.js$/,
 });
-// Bind the events to the files
+// Bind the client events to the files
 for (const name in events) {
 	const event = events[name];
 	client.on(name, event.bind(null, client));
 }
 
-// Get all the command files from commands/ and save them in a Discord Collection
+// Get all the command files from commands/ and save them in a Discord Collection, then bind them to the client
 client.commands = new Discord.Collection();
 function getCommands(dir, callback) {
 	fs.readdir(dir, (err, files) => {
@@ -46,18 +61,24 @@ function getCommands(dir, callback) {
 }
 getCommands('./commands/');
 
+
+// When the Bot is ready...
 client.once('ready', async () => {
 	console.log('Help Desk launched!');
 
-	// Update status
+	// Update bot status every hour
 	await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
 	setInterval(async () => {
 		await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
 	}, 3600000);
 
-	// Get the error Channel
-	client.errorChannel = client.channels.cache.get('749929244976742420');
+	/*
+	Get the Discord Channel where the bot will send the errors it encounters
+	Replace 'channelID' with the ID of the Discord Channel where you want the bot to send errors in.
+	*/
+	client.errorChannel = client.channels.cache.get('channelID');
 
+	// Save the launch time for the info.js command
 	client.launch = Date.now();
 });
 
@@ -69,73 +90,99 @@ client.on('raw', async event => {
 	const { d: data } = event;
 	if(typeof client.channels.cache.get(data.channel_id) === 'undefined') return;
 
-	const channel = client.channels.cache.get(data.channel_id);
+	const channel = await client.channels.resolve(data.channel_id);
 
 	// if the message is already in the cache, don't re-emit the event
 	if (channel.messages.cache.has(data.message_id)) return;
 
-	const user = client.users.cache.get(data.user_id);
+	const user = await client.users.fetch(data.user_id);
 
-	// if you're not on the master branch, use `channel.fetchMessage()`
 	const message = await channel.messages.fetch(data.message_id);
 
-	// custom emoji are keyed by IDs, while unicode emoji are keyed by names
-	const reaction = message.reactions.cache.get(data.emoji.id || data.emoji.name);
+	// Custom emoji are keyed by IDs, while unicode emoji are keyed by names
+	const reaction = await message.reactions.resolve(data.emoji.id || data.emoji.name);
 
 	client.emit('messageReactionAdd', reaction, user);
 });
+
+// When the bot encounters an error log it and send it to the errorChannel defined in the bot 'ready' event
 client.on('error', async err => {
 	console.log(err);
-	if(client.errorChannel) {
-		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
-		await client.errorChannel.send(client.errorLogEmbed);
-	}
+	await client.errorReport(err, 'Error from Global error event');
 });
-// Login into Discord
-client.login(token).catch(console.error);
+
+// Login into Discord with the bot token
+client.login(token)
+	.then(() => console.log('Help Desk logged into Discord...'))
+	.catch(console.error);
+
 // Connect to mongoDB
 client.mongoose.init();
 
 
-// Client useful properties
-// Error logs channel
-client.errorChannel = undefined;
-client.errorLogEmbed = new Discord.MessageEmbed()
-	.setColor('#ed0c0c');
+/*
+Client useful properties and methods
+ */
+
+/*
+ Error handling
+ */
+client.errorLogEmbed = new Discord.MessageEmbed().setColor('#ed0c0c');
+
 client.errorReport = async function report(err, message, channel) {
 	console.log(err);
+	// Send the failure message in the channel where the error happened
 	if(channel) await channel.send(client.failureEmbed).catch();
+	// Report the error in the bot errorChannel, gotten from the 'ready' event
 	if(client.errorChannel) {
-		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content);
+		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content || message);
 		await client.errorChannel.send(client.errorLogEmbed);
 	}
+	// Reset the error embed fields
 	client.errorLogEmbed.fields = [];
 }
+
+
+/*
+Caches
+ */
+
+client.helpDesksCache = new Discord.Collection();
+client.cooldowns = new Discord.Collection();
+
+// Function to check the global cooldown for a user
+// The user can trigger the bot only once every 0.5 seconds, this is to prevent spamming, especially in the #hel-desks
 client.checkGCD = async function(userID) {
-	// One second global cooldown cache
+	//return values:
+	//	false --> not on cooldown
+	//	true --> on cooldown
+
+	// Get the user cooldown from the cache
 	const GCD = await client.caches.getGCD(userID);
-	if(!GCD) {
-		await client.caches.setGCD([userID, Date.now()]);
-		setTimeout(async ()=> await client.caches.delGCD(userID), 1000);
-		return false;
+	// If the user isn't in the cache, cache it with the current timestamps
+	if(!GCD) await client.caches.setGCD([userID, Date.now()]);
+	else{
+		// If the last interaction with the bot happened within 0.5 seconds return true
+		// This is calculated with the timestamp
+		if(Date.now() - GCD < 500) return true;
+
+		// Re-cache the user with the current timestamp
+		client.caches.setGCD([userID, Date.now()]);
 	}
-	else if(Date.now() - GCD < 1000) return true;
 	return false;
 }
-//Emojis
+
+
+//Number emojis
 client.helpDeskEmojis = {0: '0⃣', 1: '1⃣',
 	2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣',
 	6: '6⃣', 7: '7⃣', 8: '8⃣', 9: '9⃣',
 	10: '🔟', '?': '❓'}
 
-// Caches
-client.helpDesksCache = new Discord.Collection();
-// Commands cooldown
-client.cooldowns = new Discord.Collection();
-
 // Colors
 client.mainColor = '#4cc714';
-// Default Embeds for messages responses
+
+// Default Embeds for message responses
 client.failureEmbed = new Discord.MessageEmbed()
 	.setColor('#ed0c0c')
 	.setTitle('\\❗  **Help Desk Failure** \\❗')
