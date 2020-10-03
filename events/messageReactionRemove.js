@@ -1,4 +1,6 @@
-const Discord = require('discord.js');
+/*
+This code is used to remove the @News role in the Help Desk Support Server
+You can safely delete this file
 
 module.exports = async (client, reaction, user) =>  {
     // If the reaction is on the #welcome message
@@ -9,3 +11,4 @@ module.exports = async (client, reaction, user) =>  {
         if(member && member.roles.cache.has('749384562211029012')) await member.roles.remove('749384562211029012');
     }
 }
+ */
