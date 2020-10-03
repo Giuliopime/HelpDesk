@@ -12,7 +12,7 @@
     "url": "https://github.com/Giuliopime/helpdesk"
   },
   "author": "Giulio Pimenoff Verdolin",
-  "license": "MIT",
+  "license": "GNU General Public License v3.0",
   "dependencies": {
     "discord.js": "^12.2.0",
     "mongoose": "^5.9.27",
