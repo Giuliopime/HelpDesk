@@ -7,7 +7,7 @@ module.exports = async (client, message) => {
 
 		// Define some useful variables (you can change the prefix here)
 		const guildID = message.guild.id, member = message.member;
-		let prefix = 'hd?', args = [], data, deskIndex = 0;
+		let prefix = 'hd?', args = [], deskIndex = 0;
 
 		// Check if the message starts with the prefix
 		if (!message.content.startsWith(prefix) && !message.content.startsWith(`<@!${client.user.id}>` || `<@${client.user.id}>`)) return;
@@ -30,40 +30,58 @@ module.exports = async (client, message) => {
 		const isOnCooldown = await client.checkGCD(member.id);
 		if(isOnCooldown) return;
 
-		// Command cooldown
-		const cooldowns = client.cooldowns;
-		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
+		// Command cooldowns
+		// Cooldowns are saved in the redis cache, with an hash called 'cooldowns' which contains a list of commands identified by their name, each of which contains timestamps of the users who are on a cooldown (userID + timestamp)
+		// You cannot save objects inside redis caches, so whenever we want to save an object in our cooldown hash we need to convert it to a string (I'm using JSON.stringify())
+		// For these reason when we get the value from the hash we need to convert it to an object with the JSON.parse() method
+		let timestamps = await client.caches.hget('cooldowns', command.name);
+		if (!timestamps) timestamps = '{}';
+		timestamps = JSON.parse(timestamps);
+
+		// This cooldown-checking process is inspired to the one you can find on the discord.js guide (https://discordjs.guide/command-handling/adding-features.html#cooldowns)
 		const now = Date.now();
-		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = (command.cooldown || 3) * 1000;
-		if (timestamps.has(message.author.id)) {
-			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+		const cooldownAmount = (command.cooldown || 2) * 1000;
+		if (timestamps[member.id]) {
+			const expirationTime = timestamps[member.id] + cooldownAmount;
 
 			if (now < expirationTime) {
 				const timeLeft = (expirationTime - now) / 1000;
 				client.failureEmbed.setTitle('\\🛠️  **You are being rate limited**')
 					.setDescription(`*<@${message.author.id}> please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.*`);
-				await message.author.send(client.failureEmbed).catch();
-				return client.failureEmbed.setTitle('\\❗  **Help Desk Failure** \\❗');
+				await message.author.send(client.failureEmbed).catch(() => {});
+				client.failureEmbed.setTitle('\\❗  **Help Desk Failure** \\❗');
+				return
 			}
 		}
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		timestamps[member.id] = now;
+		await client.caches.hset('cooldowns', command.name, JSON.stringify(timestamps));
+		setTimeout(async () => {
+			delete timestamps[member.id];
+			await client.caches.hset('cooldowns', command.name, JSON.stringify(timestamps));
+		}, cooldownAmount);
 
-		// Get data from the database
-		if(!data) {
-			data = await client.guildSchema.findOne({guildID: message.guild.id});
+
+
+		// Same thing for the cooldowns, we get the guild settings from the hash called 'settings' of our redis cache
+		// If the cache doesn't have the guild settings stored then we fetch them from the database
+		// Once we fetch them we update our redis cache including the new guild settings we got from the database
+		// Our settings hash looks like this: settings (which is the name) --> array of guild IDs --> each of which contains the corresponding guild settings (see guildS.js in /utils)
+		let data = await client.caches.hget('settings', guildID);
+		if (!data) {
+			data = await client.guildSchema.findOne({ guildID: guildID });
 			if(!data) {
 				data = {
 					guildID: guildID,
 					helpDesks: [],
 				}
-				// Create the new guild object for the database
 				const newGuild = new client.guildSchema(data);
 				// Save the object in the database
 				await newGuild.save().catch(err => console.log(err));
 			}
+			await client.caches.hset('settings', guildID, JSON.stringify(data));
 		}
+		else data = JSON.parse(data);
+		console.log(data)
 
 
 		// Send Messages Permission

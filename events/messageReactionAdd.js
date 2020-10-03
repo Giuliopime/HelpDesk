@@ -61,45 +61,23 @@ module.exports = async (client, reaction, user) =>  {
         const guild = reaction.message.guild, guildID = guild.id;
         const message = reaction.message, member = guild.members.resolve(user.id);
 
-        // Get data from the database
-        const hds = client.helpDesksCache;
-        let hdChannels, data;
-        if (!hds.has(guildID)) {
-            data = await client.guildSchema.findOne({guildID: guildID});
-            if (!data) {
-                // Create the new guild object for the database
-                const newGuild = new client.guildSchema({
-                    guildID: guildID,
-                    helpDesks: [],
-                });
-                data = newGuild;
-                // Save the object in the database
-                await newGuild.save().catch(err => console.log(err));
-            }
-            hds.set(guildID, data.helpDesks.map(helpDesk => helpDesk.channelID));
+        // Get data from the Cache || Database
+        let data = await client.caches.hget('settings', guildID);
+        if (!data) {
+            data = await client.guildSchema.findOne({ guildID: guildID });
+            if(!data) return;
+            await client.caches.hset('settings', guildID, JSON.stringify(data));
         }
-        const guildhds = hds.get(guildID);
-        if (guildhds) hdChannels = guildhds;
+        else data = JSON.parse(data);
+
+        const hdChannels = data.helpDesks.map(helpDesk => helpDesk.channelID);
 
         // Check if it's an Help Desk Channel
         if (hdChannels.includes(message.channel.id)) {
             // Check if the bot has all the required permissions in the #help-desk channel
             const requirePerms = ['ADD_REACTIONS', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL', 'MENTION_EVERYONE'];
-            if(!message.channel.permissionsFor(guild.me.id).has(requirePerms)) return message.channel.send(message.client.errorEmbed.setDescription(`I'm missing some important permissions to manage the help-desk>:\n**>** ${requirePerms.filter(permission => !message.channel.permissionsFor(message.guild.me.id).has(permission)).join('\n**>** ')}`)).catch();
-            // Get data from the database
-            if (!data) {
-                data = await client.guildSchema.findOne({guildID: guildID});
-                if (!data) {
-                    data = {
-                        guildID: guildID,
-                        helpDesks: [],
-                    }
-                    // Create the new guild object for the database
-                    const newGuild = new client.guildSchema(data);
-                    // Save the object in the database
-                    await newGuild.save().catch(err => console.log(err));
-                }
-            }
+            if(!message.channel.permissionsFor(guild.me.id).has(requirePerms)) return message.channel.send(message.client.errorEmbed.setDescription(`I'm missing some important permissions to manage the help-desk>:\n**>** ${requirePerms.filter(permission => !message.channel.permissionsFor(message.guild.me.id).has(permission)).join('\n**>** ')}`)).catch(() => {});
+
 
             // Interact with the user who used the #help-desk
             const deskIndex = data.helpDesks.findIndex(hd => hd.channelID === message.channel.id);
@@ -130,7 +108,7 @@ module.exports = async (client, reaction, user) =>  {
                     // Get the reply to send to the user
                     const reply = helpDesk.fieldsReplies[fieldIndex];
                     if (!reply) return;
-                    // Creater the embed message and send it to the user
+                    // Create the embed message and send it to the user
                     const embed = new MessageEmbed().setDescription(reply).setColor(client.mainColor);
                     user.send(embed)
                         // If user's DMs are closed send a message in the #help-desk notifying the user

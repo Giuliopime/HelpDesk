@@ -90,7 +90,7 @@ module.exports = {
         data.helpDesks.push(helpDesk);
         await message.client.guildSchema.updateOne({ guildID: message.guild.id }, { $set:{ helpDesks: data.helpDesks }});
         // Update bot help desks cache
-        message.client.helpDesksCache.set(message.guild.id, data.helpDesks.map(helpDesk => helpDesk.channelID));
+        await message.client.caches.hdel('settings', message.guild.id);
         // Reply to the command
         let replyEmbed = new Discord.MessageEmbed().setDescription(`I created a new <#${hdChannel.id}>.\nUse \`hd?tutorial\` to learn how to personalize it.`).setColor(message.client.mainColor);
         await message.channel.send(replyEmbed);

@@ -120,9 +120,8 @@ client.login(token)
 client.mongoose.init();
 
 
-/*
-Client useful properties and methods
- */
+
+// Client useful properties and methods
 
 /*
  Error handling
@@ -151,23 +150,24 @@ client.helpDesksCache = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
 
 // Function to check the global cooldown for a user
-// The user can trigger the bot only once every 0.5 seconds, this is to prevent spamming, especially in the #hel-desks
+// The user can trigger the bot only once every 0.5 seconds, this is to prevent spamming, especially in the #help-desks
 client.checkGCD = async function(userID) {
 	//return values:
 	//	false --> not on cooldown
 	//	true --> on cooldown
 
 	// Get the user cooldown from the cache
-	const GCD = await client.caches.getGCD(userID);
+	const GCD = await client.caches.hget('gCooldowns', userID);
+
 	// If the user isn't in the cache, cache it with the current timestamps
-	if(!GCD) await client.caches.setGCD([userID, Date.now()]);
+	if(!GCD) await client.caches.hset('gCooldowns', userID, Date.now());
 	else{
 		// If the last interaction with the bot happened within 0.5 seconds return true
 		// This is calculated with the timestamp
 		if(Date.now() - GCD < 500) return true;
 
 		// Re-cache the user with the current timestamp
-		client.caches.setGCD([userID, Date.now()]);
+		client.caches.hset('gCooldowns', userID, Date.now())
 	}
 	return false;
 }

@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = {
     // Info
     name: 'fix',
@@ -34,6 +32,8 @@ module.exports = {
         });
         if(issues > 0) {
             await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: {helpDesks: data.helpDesks}});
+            await message.client.caches.hdel('settings', message.guild.id);
+
             await message.channel.send(message.client.replyEmbed.setDescription(`Fixed ${issues} issues.`));
         }
         else {

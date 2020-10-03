@@ -57,7 +57,7 @@ module.exports = {
         }
         hdMessage.edit(newEmbed)
             .then(async msg=>{
-                if(tempMessage) await tempMessage.delete().catch();
+                if(tempMessage) await tempMessage.delete().catch(() => {});
                 message.client.replyEmbed.setDescription(`Embed correctly updated: [embed](${msg.url})`);
                 await message.channel.send(message.client.replyEmbed);
             })

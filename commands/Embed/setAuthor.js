@@ -19,6 +19,8 @@ module.exports = {
         }
         if(args[0] === '{delete}') text = undefined;
         await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.author.name']: text } });
+        await message.client.caches.hdel('settings', message.guild.id);
+
         message.client.replyEmbed.setDescription('Author set.\nUse `hd?update` to apply the changes to the #help-desk embed.');
         await message.channel.send(message.client.replyEmbed);
     },

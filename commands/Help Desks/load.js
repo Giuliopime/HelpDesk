@@ -1,4 +1,3 @@
-const fs = require('fs');
 const fetch = require('node-fetch');
 
 module.exports = {
@@ -36,6 +35,8 @@ module.exports = {
             data.helpDesks[deskIndex].specialTrigger = json.specialTrigger;
             data.helpDesks[deskIndex].specialRole = json.specialRole;
             await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: {['helpDesks.'+deskIndex]: data.helpDesks[deskIndex]}});
+            await message.client.caches.hdel('settings', message.guild.id);
+
             await message.channel.send(message.client.replyEmbed.setDescription('Settings loaded successfully. Use `hd?update` to apply the changes.'));
         }
     },

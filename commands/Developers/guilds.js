@@ -1,5 +1,4 @@
 module.exports = {
-    // GitHub test
     name: 'guilds',
     description: 'List the servers in which the bot is in',
     dev: true,

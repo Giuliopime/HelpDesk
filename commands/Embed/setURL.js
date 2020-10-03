@@ -16,6 +16,8 @@ module.exports = {
         let url = args[0];
         if(args[0] === '{delete}') url = undefined;
         await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.url']: url } });
+        await message.client.caches.hdel('settings', message.guild.id);
+
         message.client.replyEmbed.setDescription('Title URL set.\nUse `hd?update` to apply the changes to the #help-desk embed.');
         await message.channel.send(message.client.replyEmbed);
     },

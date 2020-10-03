@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = {
     // Info
     name: 'delquestion',
@@ -19,6 +17,8 @@ module.exports = {
         data.helpDesks[index].embedProperties.fields.splice(indexToDelete, 1);
         data.helpDesks[index].fieldsReplies.splice(indexToDelete, 1);
         await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: { ['helpDesks.'+index]: data.helpDesks[index] }});
+        await message.client.caches.hdel('settings', message.guild.id);
+
         message.client.replyEmbed.setDescription('Question deleted. Use `hd?update` to apply the changes.');
         await message.channel.send(message.client.replyEmbed);
     },

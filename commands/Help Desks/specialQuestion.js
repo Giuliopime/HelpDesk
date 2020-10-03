@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = {
     // Info
     name: 'specialquestion',
@@ -31,6 +29,8 @@ module.exports = {
         data.helpDesks[index].specialQuestion = args[0];
         data.helpDesks[index].specialRole = roleID;
         await message.client.guildSchema.updateOne({guildID: message.guild.id}, {$set: { ['helpDesks.'+index]: data.helpDesks[index] }});
+        await message.client.caches.hdel('settings', message.guild.id);
+
         message.client.replyEmbed.setDescription('Special Question added. Use `hd?update` to apply the changes.');
         await message.channel.send(message.client.replyEmbed);
     },
