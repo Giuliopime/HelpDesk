@@ -14,10 +14,12 @@ module.exports = {
     perms: ['EMBED_LINKS'],
     async execute(data, member, message, args, index) {
         let text = args.join(' ');
-        if(text.length > 256) {
+
+        if(text.length > 256)
             return message.channel.send(message.client.errorEmbed.setDescription('Discord allows up to 256 characters for author names.\nCheck all embed limits on [this link](https://discord.com/developers/docs/resources/channel#embed-limits).'))
-        }
+
         if(args[0] === '{delete}') text = undefined;
+
         await message.client.guildSchema.updateOne({guildID: message.guild.id},  { $set:{ ['helpDesks.' + index + '.embedProperties.author.name']: text } });
         await message.client.caches.hdel('settings', message.guild.id);
 
