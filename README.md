@@ -32,11 +32,9 @@ To do that hit CTRL-C to stop the current bot process, then do:
   - `pm2 start index.js`  
 
 **Here ya go! You now have your own bot up and running!**  
-To invite it in your server you can use [this website](https://discordapi.com/permissions.html) where you can choose the permissions your bot will have when he'll join your server.  
+To invite it in your server you can use [this website](https://discordapi.com/permissions.html) where you can choose the permissions your bot will have when it'll join your server.  
 Insert the Application Client ID inside the `Client ID` field of the website, you can get the Application Client ID from [the website of the 5th step of this guide](https://discord.com/developers/applications).  
 Once you have done that you can simply use the link the website generated for you to invite the bot in your server!
-
-
  
 
 
