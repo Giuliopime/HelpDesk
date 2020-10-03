@@ -1,4 +1,4 @@
-Every bot command has the following properties:
+Each command can have the following properties:  
 
 - name
 - description
