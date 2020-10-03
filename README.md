@@ -1,9 +1,11 @@
 # Create an #help-desk for you server!
+This is a Discord Bot which is able to create an #help-desk for your server.
+Its code is open-source under the MIT licence, filled with comments to let you understand how it works.
 
 ### *#help-desk example:*  
 ![#help-desk example in Astro's Community](https://i.ibb.co/YTPZQ9f/helpdesk.png, "#help-desk example in Astro's Community")
 
-### How does this work?
+### How does it work?
 An #help-desk is a Discord channel where users can quickly get answers to some predefined questions or receive a role to get further assistance.  
 
 1. You can add up to nine questions, and relative answers, to the help-desk.  
@@ -20,7 +22,8 @@ This allows you to create help-desk templates to use for any server of your choi
 - You can download the #help-desk settings in a local file and manually modify the #help-desk in a simple text-editor.
 
 ## [Invite me to you server!](https://discord.com/oauth2/authorize?client_id=739796627681837067&scope=bot&permissions=268954832)
-
+  
+## [Donate](https://www.patreon.com/giuliopime)
 
 
  
