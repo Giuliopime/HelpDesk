@@ -38,7 +38,7 @@ function traverse(dir, filename) {
 			const result = traverse(direntPath, filename);
 			if(result) return result;
 		}
-		else if(dirent.name === filename + '.js') return direntPath;
+		else if(dirent.name === filename + '.js') {return direntPath;}
 	}
 	return null;
 }

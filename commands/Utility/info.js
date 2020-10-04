@@ -39,28 +39,31 @@ module.exports = {
                     '\n\n**>** Version: `Alpha`' +
                     '\n**>** Library: `discord.js`' +
                     '\n**>** Developer: `</> Giuliopime#4965`',
-				);
+			);
 		await message.channel.send(statsEmbed);
 	},
 };
 
 function timeConversion(millisec) {
 
-	let seconds = (millisec / 1000).toFixed(1);
+	const seconds = (millisec / 1000).toFixed(1);
 
-	let minutes = (millisec / (1000 * 60)).toFixed(1);
+	const minutes = (millisec / (1000 * 60)).toFixed(1);
 
-	let hours = (millisec / (1000 * 60 * 60)).toFixed(1);
+	const hours = (millisec / (1000 * 60 * 60)).toFixed(1);
 
-	let days = (millisec / (1000 * 60 * 60 * 24)).toFixed(1);
+	const days = (millisec / (1000 * 60 * 60 * 24)).toFixed(1);
 
 	if (seconds < 60) {
-		return seconds + " Sec";
-	} else if (minutes < 60) {
-		return minutes + " Min";
-	} else if (hours < 24) {
-		return hours + " Hrs";
-	} else {
-		return days + " Days"
+		return seconds + ' Sec';
+	}
+	else if (minutes < 60) {
+		return minutes + ' Min';
+	}
+	else if (hours < 24) {
+		return hours + ' Hrs';
+	}
+	else {
+		return days + ' Days';
 	}
 }

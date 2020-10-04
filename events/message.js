@@ -7,17 +7,16 @@ module.exports = async (client, message) => {
 
 		// Define some useful variables (you can change the prefix here)
 		const guildID = message.guild.id, member = message.member;
-		let prefix = 'hd?', args = [], deskIndex = 0;
+		const prefix = 'hd?';
+		let args = [], deskIndex = 0;
 
 		// Check if the message starts with the prefix
 		if (!message.content.startsWith(prefix) && !message.content.startsWith(`<@!${client.user.id}>` || `<@${client.user.id}>`)) return;
 
 
 		// Check if the message is a command and get the args
-		if (message.content.startsWith(`<@!${client.user.id}>` || `<@${client.user.id}>`))
-			args = message.content.slice(23).split(/ +/);
-		else
-			args = message.content.slice(prefix.length).split(/ +/);
+		if (message.content.startsWith(`<@!${client.user.id}>` || `<@${client.user.id}>`)) {args = message.content.slice(23).split(/ +/);}
+		else {args = message.content.slice(prefix.length).split(/ +/);}
 
 		const commandName = args.shift().toLowerCase();
 		const command = client.commands.get(commandName)
@@ -50,7 +49,7 @@ module.exports = async (client, message) => {
 					.setDescription(`*<@${message.author.id}> please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.*`);
 				await message.author.send(client.failureEmbed).catch(() => {});
 				client.failureEmbed.setTitle('\\❗  **Help Desk Failure** \\❗');
-				return
+				return;
 			}
 		}
 		timestamps[member.id] = now;
@@ -59,7 +58,6 @@ module.exports = async (client, message) => {
 			delete timestamps[member.id];
 			await client.caches.hset('cooldowns', command.name, JSON.stringify(timestamps));
 		}, cooldownAmount);
-
 
 
 		// Same thing for the cooldowns, we get the guild settings from the hash called 'settings' of our redis cache
@@ -73,20 +71,19 @@ module.exports = async (client, message) => {
 				data = {
 					guildID: guildID,
 					helpDesks: [],
-				}
+				};
 				const newGuild = new client.guildSchema(data);
 				// Save the object in the database
 				await newGuild.save().catch(err => console.log(err));
 			}
 			await client.caches.hset('settings', guildID, JSON.stringify(data));
 		}
-		else data = JSON.parse(data);
-		console.log(data)
+		else {data = JSON.parse(data);}
 
 
 		// Send Messages Permission
 		if (!message.channel.permissionsFor(message.guild.me.id).has('SEND_MESSAGES')) {
-			client.failureEmbed.setDescription(`I don\'t have SEND_MESSAGES permission in *${member.guild.name}* server. Please report this to the server moderators.`);
+			client.failureEmbed.setDescription(`I don't have SEND_MESSAGES permission in *${member.guild.name}* server. Please report this to the server moderators.`);
 			message.author.send(client.failureEmbed).catch(() => {});
 			return;
 		}
@@ -110,7 +107,7 @@ module.exports = async (client, message) => {
 			if(!matched) {
 				client.errorEmbed.setDescription('*Incorrect usage of the command!*' +
 					`\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``);
-				client.errorEmbed.setFooter(`Type '${prefix}help ${commandName}' for more info`)
+				client.errorEmbed.setFooter(`Type '${prefix}help ${commandName}' for more info`);
 				await message.channel.send(client.errorEmbed);
 				client.errorEmbed.setFooter('For support use <>help');
 				return;
@@ -165,7 +162,7 @@ module.exports = async (client, message) => {
 
 						collector.on('collect', async m => {
 							// The reply is not an help desk number...
-							if (isNaN(m.content) || m.content > desks.length) msg.channel.send('Invalid number, try again.');
+							if (isNaN(m.content) || m.content > desks.length) {msg.channel.send('Invalid number, try again.');}
 							else {
 								deskIndex = m.content - 1;
 								await msg.delete();

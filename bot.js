@@ -67,9 +67,9 @@ client.once('ready', async () => {
 	console.log('Help Desk launched!');
 
 	// Update bot status every hour
-	await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
+	await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING' });
 	setInterval(async () => {
-		await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING'});
+		await client.user.setActivity('the Help Desk | hd?help | hd?invite', { type: 'WATCHING' });
 	}, 3600000);
 
 	/*
@@ -120,7 +120,6 @@ client.login(token)
 client.mongoose.init();
 
 
-
 // Client useful properties and methods
 
 /*
@@ -134,12 +133,12 @@ client.errorReport = async function report(err, message, channel) {
 	if(channel) await channel.send(client.failureEmbed).catch();
 	// Report the error in the bot errorChannel, gotten from the 'ready' event
 	if(client.errorChannel) {
-		client.errorLogEmbed.setDescription('```js\n'+err.stack.split("\n").slice(0, 3).join("\n")+'```').setTitle(err.stack.split("\n").slice(0, 1).join("\n")).addField('Command', message.content || message);
+		client.errorLogEmbed.setDescription('```js\n' + err.stack.split('\n').slice(0, 3).join('\n') + '```').setTitle(err.stack.split('\n').slice(0, 1).join('\n')).addField('Command', message.content || message);
 		await client.errorChannel.send(client.errorLogEmbed);
 	}
 	// Reset the error embed fields
 	client.errorLogEmbed.fields = [];
-}
+};
 
 
 /*
@@ -152,7 +151,7 @@ client.cooldowns = new Discord.Collection();
 // Function to check the global cooldown for a user
 // The user can trigger the bot only once every 0.5 seconds, this is to prevent spamming, especially in the #help-desks
 client.checkGCD = async function(userID) {
-	//return values:
+	// return values:
 	//	false --> not on cooldown
 	//	true --> on cooldown
 
@@ -160,20 +159,20 @@ client.checkGCD = async function(userID) {
 	const GCD = await client.caches.hget('gCooldowns', userID);
 
 	// If the user isn't in the cache, cache it with the current timestamps
-	if(!GCD) await client.caches.hset('gCooldowns', userID, Date.now());
+	if(!GCD) {await client.caches.hset('gCooldowns', userID, Date.now());}
 	else{
 		// If the last interaction with the bot happened within 0.5 seconds return true
 		// This is calculated with the timestamp
 		if(Date.now() - GCD < 500) return true;
 
 		// Re-cache the user with the current timestamp
-		client.caches.hset('gCooldowns', userID, Date.now())
+		client.caches.hset('gCooldowns', userID, Date.now());
 	}
 	return false;
-}
+};
 
 
-//Number emojis
+// Number emojis
 client.helpDeskEmojis = {
 	0: '0⃣',
 	1: '1⃣',
@@ -186,7 +185,7 @@ client.helpDeskEmojis = {
 	8: '8⃣',
 	9: '9⃣',
 	10: '🔟',
-	'?': '❓'}
+	'?': '❓' };
 
 // Colors
 client.mainColor = '#4cc714';
