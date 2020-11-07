@@ -3,7 +3,7 @@ module.exports = {
 	name: 'addquestion',
 	description: 'Add a question to the #help-desk embed',
 	aliases: ['aquestion'],
-	args: /^(.+?)( *\|\|\| *)([\s\S])$/,
+	args: /^(.+?)( *\|\|\| *)([\s\S]+)$/,
 	usage: '<question> ||| <answer>',
 	cooldown: 5,
 	// Basic checks
