@@ -3,7 +3,7 @@ module.exports = {
 	name: 'notification',
 	description: 'Choose a message that HelpDesk will send in a specific channel when a user uses the Special Question (if you include {memberID} in the notification message the bot will automatically replace that with the ID of the member who used the special question)',
 	aliases: ['noti'],
-	args: /^(<#\d{18}>|\d{18})( *\|\|\| *)(.+?)$/,
+	args: /^(<#\d{18}>|\d{18})( *\|\|\| *)([\s\S])$/,
 	usage: '<#channel or channelID> ||| <message>',
 	cooldown: 5,
 	// Basic checks
