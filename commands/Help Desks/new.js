@@ -53,6 +53,8 @@ module.exports = {
 		const helpDesk = {
 			channelID: hdChannel.id,
 			messageID: hdMessage.id,
+			notification: undefined,
+			notificationChannel: undefined,
 			// Embed properties
 			embedProperties: {
 				title: '[Title]',

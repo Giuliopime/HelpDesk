@@ -103,6 +103,14 @@ module.exports = async (client, reaction, user) => {
 						// If the bot can't assign the role report it in the #help-desk
 							.catch(() => message.channel.send(client.errorEmbed.setDescription(`I'm unable to assign the <@&${roleToAssign.id}> role. If you are a moderator of the server make sure I have \`Manage_Roles\` permissions and that the role I have to assign is under the Help Desk role in the server role hierarchy.\nLearn more with [this article](https://support.discord.com/hc/en-us/articles/214836687-Gestione-dei-Ruoli-101).\n\nIf you are not a moderator of the server report this error to one of them.`)));
 					}
+
+					if(helpDesk.notification && helpDesk.notificationChannel) {
+						const channel = guild.channels.resolve(helpDesk.notificationChannel);
+						if(channel && channel.type === 'text') {
+							const msg = helpDesk.notification.replace('{memberID}', member.id);
+							await channel.send(msg).catch(() => {});
+						}
+					}
 				}
 				else {
 					// Get the reply to send to the user
