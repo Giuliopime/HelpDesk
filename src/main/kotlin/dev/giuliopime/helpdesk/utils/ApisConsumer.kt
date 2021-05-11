@@ -27,9 +27,9 @@ object ApisConsumer {
         }
     }
 
-    /*
     private val jsonMapper = jacksonObjectMapper()
 
+    // Unused atm
     suspend fun hasUserVoted24(userID: String, source: Source = Source.TOPGG): Boolean {
         try {
             val response: HttpResponse = client.get("https://api.votetracker.bot/v1/bot/715621848489918495/votes/${source.reqName}/$userID") {
@@ -66,7 +66,6 @@ object ApisConsumer {
             return true
         }
     }
-     */
 
     suspend fun postServerCount(stats: TopggStatsD) {
         try {

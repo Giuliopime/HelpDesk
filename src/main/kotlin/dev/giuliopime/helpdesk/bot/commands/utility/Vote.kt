@@ -16,7 +16,7 @@ class Vote: AbstractCmd() {
         ctx.respond(Embed {
             color = ctx.color.rgb
             title = "Vote for Help Desk"
-            url = "https://help-desk.giuliopime.dev/vote"
+            url = "https://helpdesk.giuliopime.dev/vote"
         })
     }
 }
