@@ -15,7 +15,18 @@ object GuildStatsController {
     private val writeApi = client.writeApi
 
     fun getStats(guildID: String, lookback: String = "-7d"): GuildStatsD {
-        return GuildStatsD()
+        val query = "from(bucket:\"$bucket\") |> range(start: $lookback) |> filter(fn: (r) => r[\"_measurement\"] == \"command\" or r[\"_measurement\"] == \"question\") |> filter(fn: (r) => r[\"guild_id\"] == \"$guildID\")"
+        val results: List<FluxTable> = queryApi.query(query)
+
+        val questions = mutableListOf<FluxRecord>()
+        val commands = mutableListOf<FluxRecord>()
+
+        results.forEach { table ->
+            questions.addAll(table.records.filter { it.measurement == "question" })
+            commands.addAll(table.records.filter { it.measurement == "command" })
+        }
+
+        return GuildStatsD(questions, commands)
     }
 
     fun writeGuildJoin(guild: Guild) {
@@ -51,7 +62,7 @@ object GuildStatsController {
     }
 
     fun writeQuestion(userID: String, guildID: String, helpDeskID: String) {
-        val point = Point("vc")
+        val point = Point("question")
             .addTag("user_id", userID)
             .addTag("guild_id", guildID)
             .addField("help_desk_id", helpDeskID)

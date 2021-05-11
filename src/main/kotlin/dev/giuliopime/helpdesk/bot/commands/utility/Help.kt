@@ -14,12 +14,12 @@ class Help: AbstractCmd() {
         name = "help"
         description = "Gives some useful information to get started using Help Desk and a list of its commands."
         usage = "(command name)"
-        exampleUsages = listOf("", "lock", "g edit")
+        exampleUsages = listOf("", "prefix")
         category = CmdCategory.UTILITY
     }
     override suspend fun run(ctx: CmdCtx) {
         val prefix = ctx.prefix
-        val baseURL = "https://help-desk.giuliopime.dev"
+        val baseURL = "https://helpdesk.giuliopime.dev"
 
         if (ctx.args.size > 0 && CommandsHandler.getCommandOrNull(ctx.args.joinToString("/").toLowerCase()) != null) {
             val cmd = CommandsHandler.getCommand(ctx.args.joinToString("/").toLowerCase())
@@ -112,7 +112,7 @@ class Help: AbstractCmd() {
             ctx.respond(Embed {
                 author {
                     name = "Help Interface"
-                    url = "https://help-desk.giuliopime.dev"
+                    url = "https://helpdesk.giuliopime.dev"
                     iconUrl = ctx.guild.jda.selfUser.effectiveAvatarUrl
                 }
                 color = ctx.color.rgb

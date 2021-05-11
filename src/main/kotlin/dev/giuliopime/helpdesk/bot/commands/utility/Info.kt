@@ -24,10 +24,10 @@ class Info: AbstractCmd() {
                     "\n• Shards: `${HelpDesk.shardsManager.shards.size}`" +
                     "\n• Total servers: `${HelpDesk.shardsManager.guilds.size}`" +
                     "\n\n__**Development**__" +
-                    "\n• Version: `1.0.0`" +
+                    "\n• Version: `2.0.0`" +
                     "\n• Uptime: `${Settings.getReadableUptime()}`" +
                     "\n• Library: [`JDA`](https://github.com/DV8FromTheWorld/JDA)" +
-                    "\n• GitHub: [`Repository`](https://help-desk.giuliopime.dev/github)" +
+                    "\n• GitHub: [`Repository`](https://helpdesk.giuliopime.dev/github)" +
                     "\n• Developer: `Giuliopime#4965`"
         })
     }

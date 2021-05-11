@@ -13,6 +13,6 @@ class Support: AbstractCmd() {
     }
 
     override suspend fun run(ctx: CmdCtx) {
-        ctx.channel.sendMessage("https://help-desk.giuliopime.dev/support").queue()
+        ctx.channel.sendMessage("https://helpdesk.giuliopime.dev/support").queue()
     }
 }
