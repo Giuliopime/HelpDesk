@@ -1,6 +1,10 @@
 package dev.giuliopime.helpdesk.bot.internals.commands
 
 import dev.giuliopime.helpdesk.bot.HelpDesk
+import dev.giuliopime.helpdesk.bot.commands.guild.Config
+import dev.giuliopime.helpdesk.bot.commands.guild.Prefix
+import dev.giuliopime.helpdesk.bot.commands.guild.Stats
+import dev.giuliopime.helpdesk.bot.commands.utility.*
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
@@ -32,7 +36,19 @@ object CommandsHandler {
 
     private fun loadCommands() {
         commandsSet = mutableSetOf(
+            // Utility
+            Help(),
+            Info(),
+            Invite(),
+            Support(),
+            Ping(),
+            Shards(),
+            Vote(),
 
+            // Guild
+            Prefix(),
+            Config(),
+            Stats()
         )
         commandsMap = mutableMapOf()
 

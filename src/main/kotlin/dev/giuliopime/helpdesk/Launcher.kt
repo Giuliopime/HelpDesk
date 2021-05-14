@@ -6,7 +6,6 @@ import dev.giuliopime.helpdesk.bot.HelpDesk
 import dev.giuliopime.helpdesk.cache.RedisClient
 import dev.giuliopime.helpdesk.database.MongoDBClient
 import dev.giuliopime.helpdesk.timeseriesDB.InfluxClient
-import dev.giuliopime.helpdesk.utils.FixedRateTimers
 import org.slf4j.LoggerFactory
 
 fun main() {

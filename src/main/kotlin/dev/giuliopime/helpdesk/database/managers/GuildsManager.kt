@@ -5,8 +5,8 @@ import com.mongodb.client.model.FindOneAndUpdateOptions
 import com.mongodb.client.model.ReturnDocument
 import dev.giuliopime.helpdesk.data.guild.GuildD
 import dev.giuliopime.helpdesk.database.MongoDBClient
-import org.litote.kmongo.*
 import dev.giuliopime.helpdesk.exceptions.DBOperationFailedException
+import org.litote.kmongo.*
 
 object GuildsManager {
     private val guildsColl = MongoDBClient.db.getCollection<GuildD>("guilds")

@@ -4,10 +4,10 @@ import dev.giuliopime.helpdesk.bot.events.EventsManager
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.cache.RedisClient
 import dev.giuliopime.helpdesk.database.MongoDBClient
-import dev.giuliopime.helpdesk.utils.WebhooksService
 import dev.giuliopime.helpdesk.timeseriesDB.InfluxClient
 import dev.giuliopime.helpdesk.utils.ApisConsumer
 import dev.giuliopime.helpdesk.utils.FixedRateTimers
+import dev.giuliopime.helpdesk.utils.WebhooksService
 import dev.minn.jda.ktx.injectKTX
 import mu.KotlinLogging
 import net.dv8tion.jda.api.JDA

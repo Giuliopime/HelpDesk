@@ -4,7 +4,6 @@ import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.CommandsHandler
 import dev.giuliopime.helpdesk.cache.handlers.CooldownsHandler
 import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
-import dev.giuliopime.helpdesk.data.guild.GuildD
 import mu.KotlinLogging
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 

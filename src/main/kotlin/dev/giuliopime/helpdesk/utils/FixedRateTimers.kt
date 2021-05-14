@@ -5,7 +5,6 @@ import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
 import dev.giuliopime.helpdesk.data.topgg.TopggStatsD
 import dev.giuliopime.helpdesk.database.managers.GuildsForRemovalManager
-import dev.giuliopime.helpdesk.database.managers.GuildsManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import mu.KotlinLogging

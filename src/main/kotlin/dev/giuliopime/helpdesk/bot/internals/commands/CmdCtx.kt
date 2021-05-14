@@ -9,12 +9,13 @@ import dev.minn.jda.ktx.Message
 import dev.minn.jda.ktx.await
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.requests.ErrorResponse
 
 class CmdCtx(
-    message: Message,
+    val message: Message,
     var cmd: AbstractCmd,
     var args: MutableList<String>,
     val flags: MutableList<String>,
