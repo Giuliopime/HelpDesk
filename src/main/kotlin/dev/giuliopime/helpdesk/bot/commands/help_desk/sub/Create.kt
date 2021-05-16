@@ -81,9 +81,10 @@ class Create: AbstractCmd(HelpDesk()) {
             return
         }
 
+        // TODO: Add link to edit panel
         val msg = channel.sendMessage(Embed {
             color = ctx.color.rgb
-            description = "You can modify this Help Desk with `${ctx.prefix}helpdesk edit`"
+            description = "**This is your new Help Desk**\n\n**I already opened a panel to add questions and edit the style of this Help Desk**.\n*Alternatively you can use `${ctx.prefix}helpdesk edit` to tweak it.*"
         }).await()
 
 

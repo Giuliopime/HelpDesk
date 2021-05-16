@@ -129,7 +129,7 @@ class Help: AbstractCmd() {
                                     .joinToString("\n") { "- " + it.getReadablePath() }
                             }" +
                             "\n```"
-                    inline = true
+                    inline = false
                 }
 
                 field {
@@ -140,7 +140,7 @@ class Help: AbstractCmd() {
                                     .joinToString("\n") { "- " + it.getReadablePath() }
                             }" +
                             "\n```"
-                    inline = true
+                    inline = false
                 }
                 field {
                     name = "Help Desk"

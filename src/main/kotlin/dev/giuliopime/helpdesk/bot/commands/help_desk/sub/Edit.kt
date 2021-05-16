@@ -70,7 +70,7 @@ class Edit:AbstractCmd(HelpDesk()) {
 
         embed.addField("\u200b",
             "\n\n\n__**To select a setting send its name (or an abbreviation) in this chat.**__" +
-                    "\nExamples:\n• `answers`\n• ``\n\n*Send `done` to exit this editor.*",
+                    "\nExamples:\n• `answers`\n• `reac`\n\n*Send `done` to exit this editor.*",
             false
         )
 

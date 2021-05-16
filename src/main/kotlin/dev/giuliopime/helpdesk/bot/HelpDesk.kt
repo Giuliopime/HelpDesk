@@ -41,7 +41,7 @@ class HelpDesk {
  / __  /  __/ / /_/ /  / /_/ /  __(__  ) ,<   
 /_/ /_/\___/_/ .___/  /_____/\___/____/_/|_|  
             /_/                               
-            """".trimIndent())
+            """.trimIndent())
 
         logger.info("Launching...")
 
@@ -49,15 +49,14 @@ class HelpDesk {
             shardsManager = DefaultShardManagerBuilder
                 .create(
                     GatewayIntent.DIRECT_MESSAGES,
-                    GatewayIntent.GUILD_PRESENCES,
                     GatewayIntent.GUILD_MESSAGES,
                     GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                    GatewayIntent.GUILD_VOICE_STATES
+                    GatewayIntent.GUILD_EMOJIS
                 )
-                .setToken(Settings.Discord.token)
+                .setToken(if (Settings.testing) Settings.Discord.testToken else Settings.Discord.token)
                 .setActivity(Activity.watching(Settings.Discord.status))
                 .setStatus(OnlineStatus.ONLINE)
-                .disableCache(CacheFlag.CLIENT_STATUS)
+                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
                 .injectKTX()
                 .build()
 

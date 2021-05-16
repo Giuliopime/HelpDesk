@@ -6,9 +6,10 @@ import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.timeseriesDB.controllers.GuildStatsController
 import dev.minn.jda.ktx.Embed
 
-class Stats: AbstractCmd() {
+class GuildStats: AbstractCmd() {
     init {
-        name = "stats"
+        name = "guildStats"
+        aliases = listOf("gStats", "gStat", "guildStat")
         description = "Gives you some statistics about Help Desk's usage in the server."
         cooldown = 5000
         category = CmdCategory.GUILD
@@ -36,8 +37,7 @@ class Stats: AbstractCmd() {
             description = "These are all the stats that Help Desk gathered about this server in the **last 7 days**!" +
                     "\n\n__**Help Desks stats**__" +
                     "\n• Questions answered: `${stats.questions.size}`" +
-                    "\n• Most used Help Desks (message IDs): ${
-                        mostUsedHelpDesks.toList().take(5).joinToString(", ") { "`${it.first}`" }
+                    "\n• Most used Help Desks (message IDs): ${if(mostUsedHelpDesks.isEmpty()) "None" else mostUsedHelpDesks.toList().take(5).joinToString(", ") { "`${it.first}`" }
                     }" +
                     "\n\n__**Commands stats**__" +
                     "\n• Commands used: `${stats.commands.size}`" +

@@ -26,9 +26,9 @@ class Config: AbstractCmd() {
                     "\n" +
                     "\n__**Help Desks**__\n${
                         if (ctx.guildData.helpDesks.size == 0)
-                            "This server doesn't have any Help Desk, you can create one with `${ctx.prefix}helpdesk create` or via the Help Desk panel `${ctx.prefix}helpdesk`."
+                            "This server doesn't have any Help Desk, you can create one with `${ctx.prefix}helpdesk create` or via the Help Desk panel `${ctx.prefix}helpdesk`.\n\u200b"
                         else
-                            "Found ${ctx.guildData.helpDesks.size} Help Desk${if (ctx.guildData.helpDesks.size == 1) "" else "s"}.\nUse the Help Desk panel to manage them `${ctx.prefix}helpdesk`."
+                            "Found ${ctx.guildData.helpDesks.size} Help Desk${if (ctx.guildData.helpDesks.size == 1) "" else "s"}.\nUse the Help Desk panel to manage them `${ctx.prefix}helpdesk`.\n\u200b"
                     }"
             thumbnail = ctx.guild.iconUrl
             footer {
