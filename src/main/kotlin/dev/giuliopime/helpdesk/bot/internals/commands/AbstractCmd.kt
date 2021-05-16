@@ -23,7 +23,7 @@ abstract class AbstractCmd(val parentCmd: AbstractCmd? = null) {
     var botChannelPerms: BotChannelPerms = parentCmd?.botChannelPerms ?: BotChannelPerms.MESSAGES
     var userPerms: CmdUserPerms = parentCmd?.userPerms ?: CmdUserPerms.NONE
 
-    var requiresHelpDeskIndex: Boolean = false
+    var requiresHelpDeskIndex: Boolean = parentCmd?.requiresHelpDeskIndex ?: false
 
     fun getDefaultPath(): String {
         return if (parentCmd == null)

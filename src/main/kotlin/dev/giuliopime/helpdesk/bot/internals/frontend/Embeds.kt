@@ -90,7 +90,7 @@ object Embeds {
         }
     }
 
-    fun helpDeskChoice(helpdesks: MutableList<HelpDeskD>, color: Color = Colors.primary): MessageEmbed {
+    fun helpDeskChoice(helpdesks: MutableList<HelpDeskD>, guildID: String, color: Color = Colors.primary): MessageEmbed {
         val embedBuilder = EmbedBuilder()
             .setColor(color)
             .setTitle("${Reactions.Extended.question} Help Desk selection dialog")
@@ -99,7 +99,7 @@ object Embeds {
         descriptionBuilder.append("**Select an Help Desk on which you want to apply this command.**\n\nTo select an Help Desk send its index after this message.\nExample: `1`.")
 
         for ((index, hd) in helpdesks.withIndex())
-            descriptionBuilder.append("\n\n`${index + 1}.` **<#${hd.channelID}>** [message ID: `*${hd.messageID}*`]")
+            descriptionBuilder.append("\n\n`${index + 1}.` **<#${hd.channelID}>** [message ID: [`${hd.messageID}`](https://discord.com/channels/${guildID}/${hd.channelID}/${hd.messageID})]")
 
         descriptionBuilder.append("\n\n*You have 60 seconds* to send the index.\n*To cancel* this action send `cancel`.")
 

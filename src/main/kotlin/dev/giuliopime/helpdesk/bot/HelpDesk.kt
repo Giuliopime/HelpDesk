@@ -56,6 +56,7 @@ class HelpDesk {
                 .setToken(if (Settings.testing) Settings.Discord.testToken else Settings.Discord.token)
                 .setActivity(Activity.watching(Settings.Discord.status))
                 .setStatus(OnlineStatus.ONLINE)
+                .enableCache(CacheFlag.EMOTE)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
                 .injectKTX()
                 .build()

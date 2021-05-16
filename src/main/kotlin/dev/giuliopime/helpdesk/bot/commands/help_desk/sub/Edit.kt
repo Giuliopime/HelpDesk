@@ -7,6 +7,7 @@ import dev.giuliopime.helpdesk.bot.internals.commands.CommandsHandler
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
+import dev.giuliopime.helpdesk.bot.internals.extentions.awaitSpecificMessage
 import dev.giuliopime.helpdesk.bot.internals.extentions.takeFirstN
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
@@ -42,59 +43,46 @@ class Edit:AbstractCmd(HelpDesk()) {
             .setColor(ctx.color)
             .setTitle("${Reactions.Extended.edit} Help Desk Editor")
 
-        embed.addField("Info",
+        embed.addField("\u200b\nInfo",
             "• `Channel` = <#${hd.channelID}>" +
                     "\n• `Message ID` = ${hd.messageID}" +
-                    "\n• `Direct link` = [here](https://discord.com/channels/${ctx.guildID}/${hd.channelID}/${hd.messageID})",
+                    "\n• `Direct link` = [here](https://discord.com/channels/${ctx.guildID}/${hd.channelID}/${hd.messageID})" +
+                    "\n\u200b",
             false
         )
 
-        embed.addField("Questions & Answers",
+        embed.addField("Questions (& Answers & Reactions)",
             "• [`Questions`]($baseURL) = Select to view more" +
-                    "\n• [`Answers`]($baseURL) = Select to view more",
+                    "\n\u200B",
             false
         )
 
         embed.addField("Aesthetic",
             "• [`Help Desk message`]($baseURL) = Select to view more" +
                     "\n• [`Answers message`]($baseURL) = Select to view more" +
-                    "\n• [`Reactions`]($baseURL) = Select to view more",
+                    "\n\u200B",
             false
         )
 
         embed.addField("Notification",
             "• [`Channel`]($baseURL) = ${if(hd.notificationChannel != null) "<#${hd.notificationChannel}>" else "*not set*"}" +
-                    "\n• [`Message`]($baseURL) = ${if(hd.notification != null) hd.notification.takeFirstN() else "*not set*"}",
+                    "\n• [`Message`]($baseURL) = ${if(hd.notification != null) hd.notification.takeFirstN() else "*not set*"}" +
+                    "\n\u200B",
             false
         )
 
         embed.addField("\u200b",
             "\n\n\n__**To select a setting send its name (or an abbreviation) in this chat.**__" +
-                    "\nExamples:\n• `answers`\n• `reac`\n\n*Send `done` to exit this editor.*",
+                    "\nExamples:\n• `questions`\n• `answ`\n\n*Send `done` to exit this editor.*",
             false
         )
 
         ctx.respond(embed.build())
 
 
-        val choices = listOf("questions", "answers", "help desk message", "answers message", "reactions", "channel", "message", "done")
+        val choices = listOf("questions", "help desk message", "answers message", "channel", "message", "done")
 
-        val choice = withTimeoutOrNull(120000) {
-            val event = ctx.channel.jda.await<GuildMessageReceivedEvent> {
-                it.author.id == ctx.userID
-                        && it.channel.id == ctx.channel.id
-                        && choices.any { string -> string.toLowerCase().startsWith(it.message.contentRaw.toLowerCase()) }
-            }
-
-            try {
-                event.message.delete().queue()
-            }
-            catch (ignored: ErrorResponseException) {}
-            catch (ignored: InsufficientPermissionException) {}
-
-            return@withTimeoutOrNull choices.find { it.toLowerCase().startsWith(event.message.contentRaw.toLowerCase()) }
-                ?.toLowerCase()
-        }
+        val choice = ctx.channel.awaitSpecificMessage(ctx.userID, choices, 120000)
 
         when (choice) {
             null ->  {
@@ -109,6 +97,10 @@ class Edit:AbstractCmd(HelpDesk()) {
 
         val cmdName = when (choice) {
             "questions" -> "questions"
+            "help desk message" -> "helpdeskmessage"
+            "answers message" -> "answersmessage"
+            "channel" -> "notichannel"
+            "message" -> "notimessage"
             else -> "questions"
         }
         ctx.cmd = CommandsHandler.getCommand(getDefaultPath() + "/${cmdName}")

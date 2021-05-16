@@ -7,11 +7,13 @@ import dev.giuliopime.helpdesk.bot.commands.guild.GuildStats
 import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Create
 import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Delete
 import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Edit
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.Questions
 import dev.giuliopime.helpdesk.bot.commands.utility.*
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
+import dev.giuliopime.helpdesk.bot.internals.extentions.awaitNumericMessage
 import dev.giuliopime.helpdesk.bot.internals.frontend.Colors
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.cache.handlers.CooldownsHandler
@@ -58,7 +60,12 @@ object CommandsHandler {
             dev.giuliopime.helpdesk.bot.commands.help_desk.sub.List(),
             Create(),
             Edit(),
-            Delete()
+            Delete(),
+            Questions(),
+            Questions.HandleQuestion(),
+            Questions.EditQuestion(),
+            Questions.EditAnswer(),
+            Questions.EditReaction(),
         )
         commandsMap = mutableMapOf()
 
@@ -194,6 +201,8 @@ object CommandsHandler {
 
                 if (ctx.helpDeskIndex != -1)
                     helpDeskIndex = ctx.helpDeskIndex
+                else if (guildData.helpDesks.size == 1)
+                    helpDeskIndex = 0
                 else {
                     val matcher = Pattern.compile("(-\\d+)").matcher(ctx.args.joinToString(" "))
                     if (matcher.find()) {
@@ -203,37 +212,14 @@ object CommandsHandler {
                     }
 
                     if (helpDeskIndex == -1) {
-                        helpDeskIndex = if (guildData.helpDesks.size == 1)
-                            0
-                        else {
-                            ctx.respond(
-                                Embeds.helpDeskChoice(
-                                    guildData.helpDesks,
-                                    guild.selfMember.color ?: Colors.primary
-                                )
+                        ctx.respond(
+                            Embeds.helpDeskChoice(
+                                guildData.helpDesks,
+                                guildData.guildID,
+                                guild.selfMember.color ?: Colors.primary
                             )
-
-                            withTimeoutOrNull(60000) {
-                                val event = channel.jda.await<GuildMessageReceivedEvent> {
-                                    it.author.id == member.id
-                                            && it.channel.id == channel.id
-                                            && (it.message.contentRaw == "cancel" ||
-                                            (it.message.contentRaw.toIntOrNull() != null
-                                                    && it.message.contentRaw.toInt() >= 1
-                                                    && it.message.contentRaw.toInt() <= guildData.helpDesks.size))
-                                }
-
-                                if (event.message.contentRaw.toLowerCase().startsWith("cancel")) {
-                                    event.message.delete().queue()
-                                    return@withTimeoutOrNull -1
-                                }
-
-                                val index = event.message.contentRaw.toIntOrNull()?.minus(1)
-                                event.message.delete().queue()
-
-                                return@withTimeoutOrNull index
-                            }
-                        }
+                        )
+                        helpDeskIndex = ctx.channel.awaitNumericMessage(ctx.userID, "cancel", ctx.guildData.helpDesks.size)
 
                         when (helpDeskIndex) {
                             null -> {
@@ -248,6 +234,9 @@ object CommandsHandler {
                             -1 -> {
                                 ctx.respond(Embeds.operationCanceled("Canceled via `cancel`."))
                                 return
+                            }
+                            else -> {
+                                helpDeskIndex -= 1
                             }
                         }
                     }

@@ -24,7 +24,7 @@ class List: AbstractCmd(HelpDesk()) {
             descriptionBuilder.append("\n\n__This server doesn't have any Help Desk.__")
 
         for ((index, helpdesk) in ctx.guildData.helpDesks.withIndex())
-            descriptionBuilder.append("\n\n`${index + 1}.` **<#${helpdesk.channelID}>** [message ID: `${helpdesk.messageID}`]")
+            descriptionBuilder.append("\n\n`${index + 1}.` **<#${helpdesk.channelID}>** [message ID: [`${helpdesk.messageID}`](https://discord.com/channels/${ctx.guildID}/${helpdesk.channelID}/${helpdesk.messageID})]")
 
         ctx.respond(Embed {
             color = ctx.color.rgb

@@ -90,7 +90,7 @@ class Create: AbstractCmd(HelpDesk()) {
 
 
         ctx.guildData.helpDesks.add(HelpDeskD(channelID = channel.id, messageID = msg.id))
-        GuildsHandler.update(ctx.guildData)
+        GuildsHandler.updateWithRoute(ctx.guildID, "helpDesks", ctx.guildData.helpDesks)
 
         ctx.respond(Embeds.operationSuccessful("Help Desk created successfully in ${channel.asMention}.\n*Loading the Help Desk editor...*"))
 

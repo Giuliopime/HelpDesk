@@ -25,7 +25,7 @@ class Delete: AbstractCmd(HelpDesk()) {
 
     override suspend fun run(ctx: CmdCtx) {
         ctx.guildData.helpDesks.removeAt(ctx.helpDeskIndex)
-        GuildsHandler.update(ctx.guildData)
+        GuildsHandler.updateWithRoute(ctx.guildID, "helpDesks", ctx.guildData.helpDesks)
 
         ctx.respond(Embeds.operationSuccessful("Help Desk deleted!\nYou can manually delete the Help Desk message / channel if you want."))
     }
