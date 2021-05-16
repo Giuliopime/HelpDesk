@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class HelpDeskD(
-    val channelID: String,
-    val messageID: String,
+    var channelID: String,
+    var messageID: String,
     val notification: String? = null,
     val notificationChannel: String? = null,
     val embedProperties: EmbedPropertiesD = EmbedPropertiesD(),
