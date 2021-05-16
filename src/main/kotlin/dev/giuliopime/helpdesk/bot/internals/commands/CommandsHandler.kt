@@ -3,7 +3,10 @@ package dev.giuliopime.helpdesk.bot.internals.commands
 import dev.giuliopime.helpdesk.bot.HelpDesk
 import dev.giuliopime.helpdesk.bot.commands.guild.Config
 import dev.giuliopime.helpdesk.bot.commands.guild.Prefix
-import dev.giuliopime.helpdesk.bot.commands.guild.Stats
+import dev.giuliopime.helpdesk.bot.commands.guild.GuildStats
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Create
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Delete
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Edit
 import dev.giuliopime.helpdesk.bot.commands.utility.*
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
@@ -48,7 +51,14 @@ object CommandsHandler {
             // Guild
             Prefix(),
             Config(),
-            Stats()
+            GuildStats(),
+
+            // Help Desk
+            dev.giuliopime.helpdesk.bot.commands.help_desk.HelpDesk(),
+            dev.giuliopime.helpdesk.bot.commands.help_desk.sub.List(),
+            Create(),
+            Edit(),
+            Delete()
         )
         commandsMap = mutableMapOf()
 

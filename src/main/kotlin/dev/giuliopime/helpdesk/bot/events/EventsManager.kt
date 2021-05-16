@@ -1,12 +1,14 @@
 package dev.giuliopime.helpdesk.bot.events
 
 import dev.giuliopime.helpdesk.bot.HelpDesk
+import dev.giuliopime.helpdesk.bot.events.listeners.onGuildMessageReceived
 import dev.giuliopime.helpdesk.bot.events.listeners.onReady
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.utils.WebhooksService
 import dev.minn.jda.ktx.listener
 import mu.KotlinLogging
 import net.dv8tion.jda.api.events.*
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.sharding.ShardManager
 
@@ -20,6 +22,8 @@ object EventsManager {
                     return@listener
                 when (event) {
                     is ReadyEvent -> onReady(event)
+
+                    is GuildMessageReceivedEvent -> onGuildMessageReceived(event)
 
                     is ResumedEvent -> onResume(event)
                     is ReconnectedEvent -> onReconnect(event)

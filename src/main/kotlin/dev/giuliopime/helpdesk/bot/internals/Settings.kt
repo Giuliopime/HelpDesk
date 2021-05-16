@@ -14,7 +14,7 @@ object Settings {
     var developerIDs: List<String> = getFromEnv("developers.ids").split(",")
     var testing = getFromEnv("testing") == "true"
     var logPermissionExceptions = getFromEnv("log.permission.exceptions") == "true"
-    var maxCommandsNesting = getFromEnv("max.command.nesting").toInt()
+    var maxCommandsNesting = getFromEnv("max.commands.nesting").toInt()
 
     var voteTrackerApiKey = getFromEnv("vote.tracker.api.key")
     var topggApiKey = getFromEnv("topgg.api.key")
@@ -26,7 +26,7 @@ object Settings {
         val errorWebhookUrl = getFromEnv("error.webhook.url")
     }
 
-    private fun getFromEnv(key: String): String {
+    fun getFromEnv(key: String): String {
         val value = dotenv[key.toUpperCase().replace('.', '_')]
 
         if (value == null) {

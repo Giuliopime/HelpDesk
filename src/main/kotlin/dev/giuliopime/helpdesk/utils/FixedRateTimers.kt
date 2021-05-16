@@ -34,7 +34,7 @@ object FixedRateTimers {
     private val topggStatsPoster = fixedRateTimer("Top.gg stats poster", false, 0L, 43200000) {
         if (!Settings.testing) {
             GlobalScope.async {
-                ApisInteractor.postServerCount(
+                ApisConsumer.postServerCount(
                     TopggStatsD(HelpDesk.shardsManager.guilds.size.toLong(), HelpDesk.shardsManager.shardsTotal)
                 )
             }
