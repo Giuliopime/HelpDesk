@@ -3,7 +3,6 @@ package dev.giuliopime.helpdesk.bot.commands.help_desk.sub
 import dev.giuliopime.helpdesk.bot.commands.help_desk.HelpDesk
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
-import dev.giuliopime.helpdesk.bot.internals.commands.CommandsHandler
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
@@ -12,36 +11,31 @@ import dev.giuliopime.helpdesk.bot.internals.frontend.Colors
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
 import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
-import dev.giuliopime.helpdesk.data.helpdesk.HelpDeskD
 import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.await
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import net.dv8tion.jda.api.EmbedBuilder
 
-class Create: AbstractCmd(HelpDesk()) {
+class ResendMessage: AbstractCmd(HelpDesk()) {
     init {
-        name = "create"
-        aliases = listOf("new")
-        description = "Allows you to create a new Help Desk for your server."
+        name = "resendMessage"
+        aliases = listOf("sendMessage")
+        description = "Allows you to recreate the Help Desk in case it has been deleted."
+        flags = listOf(Pair("-i", "The index of the Help Desk to edit"))
+        usage = "(flags)"
+        exampleUsages = listOf("", "-2")
+        cooldown = 2000
         category = CmdCategory.HELP_DESK
-        cooldown = 5000
-        uniqueUsage = true
-        botChannelPerms = BotChannelPerms.MESSAGES_CONTROL
         userPerms = CmdUserPerms.MANAGE_CHANNELS
+        botChannelPerms = BotChannelPerms.MESSAGES_CONTROL
+        uniqueUsage = true
+        requiresHelpDeskIndex = true
     }
 
     override suspend fun run(ctx: CmdCtx) {
-        if (ctx.guildData.helpDesks.size >= 10) {
-            ctx.respond(Embeds.operationCanceled("You already have 10 Help Desks in your server, you can't currently have more than that."))
-            return
-        }
-
-        val botMsg = ctx.respond(Embed {
+        ctx.respond(Embed {
             color = ctx.color.rgb
             title = "Channel selector"
-            description = "Mention the text channel where you want the Help Desk to be created.\n\n*Example: ${ctx.channel.asMention}*"
+            description = "Mention the text channel where you want the Help Desk to be sent.\n\n*Example: ${ctx.channel.asMention}*"
         })
 
         val channelMsg = ctx.channel.awaitMessageOrNull({
@@ -83,22 +77,14 @@ class Create: AbstractCmd(HelpDesk()) {
 
         val msg = channel.sendMessage(Embed {
             color = ctx.color.rgb
-            description = "**This is your new Help Desk**\n\n**I already opened a [`panel`](https://discord.com/channels/${ctx.guildID}/${ctx.channel.id}/${botMsg.id}) to add questions and edit the style of this Help Desk**.\n*Alternatively you can use `${ctx.prefix}helpdesk edit` to tweak it.*"
+            description = "**This is the resent Help Desk**\n\n**Use `${ctx.prefix}helpdesk update` to synchronize the content with the settings (aka update the Help Desk).**"
         }).await()
 
+        ctx.guildData.helpDesks[ctx.helpDeskIndex].messageID = msg.id
+        ctx.guildData.helpDesks[ctx.helpDeskIndex].channelID = channel.id
 
-
-        ctx.guildData.helpDesks.add(HelpDeskD(channelID = channel.id, messageID = msg.id))
         GuildsHandler.updateWithRoute(ctx.guildID, "helpDesks", ctx.guildData.helpDesks)
 
-        ctx.respond(Embeds.operationSuccessful("Help Desk created successfully in ${channel.asMention}.\n*Loading the Help Desk editor...*"))
-
-        delay(2000L)
-
-        ctx.cmd = CommandsHandler.getCommand("helpdesk/edit")
-        ctx.helpDeskIndex = ctx.guildData.helpDesks.size - 1
-        GlobalScope.async {
-            CommandsHandler.runCmd(ctx)
-        }
+        ctx.respond(Embeds.operationSuccessful("*Help Desk resent in ${channel.asMention}.*\n\n**Use `${ctx.prefix}helpdesk update` to synchronize the content with the settings (aka update the Help Desk).**"))
     }
 }
