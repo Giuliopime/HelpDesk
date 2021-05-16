@@ -48,7 +48,7 @@ class Questions: AbstractCmd(Edit()) {
 
         ctx.respond(embed)
 
-        val answerIndex = ctx.channel.awaitNumericMessage(ctx.userID, "done", if (questions.size < 20) questions.size + 1 else questions.size)
+        val answerIndex = ctx.channel.awaitNumericMessage(ctx.userID, "done", if (questions.size == 20) 20 else questions.size + 1)
 
         when (answerIndex) {
             null ->  {
@@ -86,8 +86,11 @@ class Questions: AbstractCmd(Edit()) {
         override suspend fun run(ctx: CmdCtx) {
             val index = ctx.args.first().toIntOrNull()?.minus(1)
 
-            if (index == null || index < 0 || index > 19) {
-                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and 20."))
+            val questions = ctx.guildData.helpDesks[ctx.helpDeskIndex].questions
+            val maxIndex = if (questions.size == 20) 20 else questions.size + 1
+
+            if (index == null || index < 0 || index > maxIndex) {
+                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and $maxIndex."))
                 return
             }
 
@@ -180,8 +183,11 @@ class Questions: AbstractCmd(Edit()) {
         override suspend fun run(ctx: CmdCtx) {
             val index = ctx.args.first().toIntOrNull()?.minus(1)
 
-            if (index == null || index < 0 || index > 19) {
-                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and 20."))
+            val questions = ctx.guildData.helpDesks[ctx.helpDeskIndex].questions
+            val maxIndex = if (questions.size == 20) 20 else questions.size + 1
+
+            if (index == null || index < 0 || index > maxIndex) {
+                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and $maxIndex."))
                 return
             }
 
@@ -225,8 +231,11 @@ class Questions: AbstractCmd(Edit()) {
         override suspend fun run(ctx: CmdCtx) {
             val index = ctx.args.first().toIntOrNull()?.minus(1)
 
-            if (index == null || index < 0 || index > 19) {
-                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and 20."))
+            val questions = ctx.guildData.helpDesks[ctx.helpDeskIndex].questions
+            val maxIndex = if (questions.size == 20) 20 else questions.size + 1
+
+            if (index == null || index < 0 || index > maxIndex) {
+                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and $maxIndex."))
                 return
             }
 
@@ -270,8 +279,11 @@ class Questions: AbstractCmd(Edit()) {
         override suspend fun run(ctx: CmdCtx) {
             val index = ctx.args.first().toIntOrNull()?.minus(1)
 
-            if (index == null || index < 0 || index > 19) {
-                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and 20."))
+            val questions = ctx.guildData.helpDesks[ctx.helpDeskIndex].questions
+            val maxIndex = if (questions.size == 20) 20 else questions.size + 1
+
+            if (index == null || index < 0 || index > maxIndex) {
+                ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and $maxIndex."))
                 return
             }
 
