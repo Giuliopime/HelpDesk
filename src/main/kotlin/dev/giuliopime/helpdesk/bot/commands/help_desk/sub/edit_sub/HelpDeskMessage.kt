@@ -13,6 +13,7 @@ import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
 import dev.minn.jda.ktx.Embed
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import net.dv8tion.jda.api.entities.MessageEmbed
 import redis.clients.jedis.commands.Commands
 
 class HelpDeskMessage:AbstractCmd(Edit()) {
@@ -93,16 +94,16 @@ class HelpDeskMessage:AbstractCmd(Edit()) {
             val property = ctx.args.first().toLowerCase().replace(" ", "_")
 
             val charLimit = when (property) {
-                "author" -> 256
-                "author_url" -> 200
-                "author_icon" -> 200
-                "title" -> 256
-                "title_url" -> 200
-                "description" -> 2048
-                "thumbnail" -> 200
-                "image" -> 200
-                "footer" -> 2048
-                "footer_icon" -> 200
+                "author" -> MessageEmbed.AUTHOR_MAX_LENGTH
+                "author_url" -> MessageEmbed.URL_MAX_LENGTH
+                "author_icon" -> MessageEmbed.URL_MAX_LENGTH
+                "title" -> MessageEmbed.TITLE_MAX_LENGTH
+                "title_url" -> MessageEmbed.URL_MAX_LENGTH
+                "description" -> MessageEmbed.TEXT_MAX_LENGTH
+                "thumbnail" -> MessageEmbed.URL_MAX_LENGTH
+                "image" -> MessageEmbed.URL_MAX_LENGTH
+                "footer" -> MessageEmbed.TEXT_MAX_LENGTH
+                "footer_icon" -> MessageEmbed.URL_MAX_LENGTH
                 "timestamp" -> 20
                 "delete" -> 10
                 else -> -1
