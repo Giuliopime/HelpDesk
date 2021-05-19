@@ -125,6 +125,7 @@ object Embeds {
             .build()
     }
 
+    // TODO: Remove server perms?
     fun missingBotServerPerms(permType: BotServerPerms): MessageEmbed {
         val description = StringBuilder()
         description.append("**Help Desk is missing the following permissions, please report it to a moderator of the server:**")

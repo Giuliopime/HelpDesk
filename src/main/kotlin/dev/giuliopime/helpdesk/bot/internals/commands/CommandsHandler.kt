@@ -4,10 +4,9 @@ import dev.giuliopime.helpdesk.bot.HelpDesk
 import dev.giuliopime.helpdesk.bot.commands.guild.Config
 import dev.giuliopime.helpdesk.bot.commands.guild.Prefix
 import dev.giuliopime.helpdesk.bot.commands.guild.GuildStats
-import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Create
-import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Delete
-import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Edit
-import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.Questions
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.*
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.*
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.questions.*
 import dev.giuliopime.helpdesk.bot.commands.utility.*
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
@@ -57,15 +56,23 @@ object CommandsHandler {
 
             // Help Desk
             dev.giuliopime.helpdesk.bot.commands.help_desk.HelpDesk(),
-            dev.giuliopime.helpdesk.bot.commands.help_desk.sub.List(),
+            List(),
             Create(),
             Edit(),
             Delete(),
+            ResendMessage(),
             Questions(),
             Questions.HandleQuestion(),
-            Questions.EditQuestion(),
-            Questions.EditAnswer(),
-            Questions.EditReaction(),
+            EditQuestion(),
+            EditAnswer(),
+            EditReaction(),
+            EditRole(),
+            EditNotiChannel(),
+            EditNotiMessage(),
+            HelpDeskMessage(),
+            HelpDeskMessage.HandleMessageProperty(),
+            AnswersMessage(),
+            AnswersMessage.HandleAnswerProperty(),
         )
         commandsMap = mutableMapOf()
 
