@@ -7,4 +7,7 @@ data class QuestionD(
     val question: String? = null,
     val answer: String? = null,
     val reaction: String? = null,
+    val roleID: String? = null,
+    val notificationChannel: String? = null,
+    val notificationMessage: String? = null
 )

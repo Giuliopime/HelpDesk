@@ -1,6 +1,6 @@
-package dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub
+package dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.questions
 
-import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.Edit
+import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.Questions
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.CommandsHandler
@@ -15,22 +15,38 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import net.dv8tion.jda.api.EmbedBuilder
 
-class NotiChannel:AbstractCmd(Edit()) {
+class EditNotiChannel: AbstractCmd(Questions.HandleQuestion()) {
     init {
-        name = "notiChannel"
-        aliases = listOf("nc", "notificationChannel")
-        description = "Lets you choose the text channel for the notification message of the Special Question."
+        name = "editNotiChannel"
+        aliases = listOf("enc")
+        description = "Can be used to edit the channel for the notification message of a question of the Help Desk"
+        requiresArgs = true
+        usage = "[question number]"
+        exampleUsages = listOf("3", "20")
+        cooldown = 2000
     }
 
     override suspend fun run(ctx: CmdCtx) {
+        val index = ctx.args.first().toIntOrNull()?.minus(1)
+
+        val questions = ctx.guildData.helpDesks[ctx.helpDeskIndex].questions
+        val maxIndex = if (questions.size == 20) 20 else questions.size + 1
+
+        if (index == null || index < 0 || index > maxIndex) {
+            ctx.respond(Embeds.operationFailed("You didn't provide a valid number.", "Reuse the command and provide a number between 1 and $maxIndex."))
+            return
+        }
+
         ctx.respond(Embed {
             color = ctx.color.rgb
             title = "Channel selector"
-            description = "Mention the text channel where you want the Notification message to be sent.\n\n*Example: ${ctx.channel.asMention}*"
+            description = "**Mention the text channel where you want the Notification message to be sent.**\n" +
+                    "*Send `delete` instead to unset the notification channel.*" +
+                    "\n\n*Example: ${ctx.channel.asMention}*"
         })
 
         val channelMsg = ctx.channel.awaitMessageOrNull({
-            it.author.id == ctx.userID && it.message.mentionedChannels.size > 0
+            it.author.id == ctx.userID && (it.message.contentRaw.toLowerCase() == "delete" || it.message.mentionedChannels.size > 0)
         })
 
         if (channelMsg == null) {
@@ -43,14 +59,14 @@ class NotiChannel:AbstractCmd(Edit()) {
             return
         }
 
-        val channel = channelMsg.mentionedChannels.first()
+        val channel = if (channelMsg.contentRaw.toLowerCase() == "delete") null else channelMsg.mentionedChannels.first()
 
-        if (channel.guild.id != ctx.guildID) {
+        if (channel != null && channel.guild.id != ctx.guildID) {
             ctx.respond(Embeds.operationFailed("The mentioned channel doesn't belong to this server.", "Reuse this command and provide a channel of this server."))
             return
         }
 
-        if (!ctx.guild.selfMember.hasPermission(channel, BotChannelPerms.MESSAGES.discordPermissions)) {
+        if (channel != null && !ctx.guild.selfMember.hasPermission(channel, BotChannelPerms.MESSAGES.discordPermissions)) {
             val description = StringBuilder()
             description.append("**Help Desk is missing some of the following permissions in the mentioned channel:**")
             BotChannelPerms.MESSAGES.discordPermissions.forEach { description.append("\n• ${it.getName()}") }
@@ -66,7 +82,7 @@ class NotiChannel:AbstractCmd(Edit()) {
             return
         }
 
-        ctx.guildData = GuildsHandler.updateWithRoute(ctx.guildID, "helpDesks.${ctx.helpDeskIndex}.notificationChannel", channel.id)
+        ctx.guildData = GuildsHandler.updateWithRoute(ctx.guildID, "helpDesks.${ctx.helpDeskIndex}.questions.$index.notificationChannel", channel?.id)
 
         ctx.cmd = CommandsHandler.getCommand(parentCmd!!.getDefaultPath())
         GlobalScope.async {

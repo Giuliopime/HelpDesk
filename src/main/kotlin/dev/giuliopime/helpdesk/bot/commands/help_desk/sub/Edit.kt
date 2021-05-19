@@ -51,7 +51,7 @@ class Edit:AbstractCmd(HelpDesk()) {
             false
         )
 
-        embed.addField("Questions (& Answers & Reactions)",
+        embed.addField("Questions (includes Answers & Reactions & Roles & Notifications)",
             "• [`Questions`]($baseURL) = Select to view more" +
                     "\n\u200B",
             false
@@ -64,29 +64,23 @@ class Edit:AbstractCmd(HelpDesk()) {
             false
         )
 
-        embed.addField("Notification",
-            "• [`Channel`]($baseURL) = ${if(hd.notificationChannel != null) "<#${hd.notificationChannel}>" else "*not set*"}" +
-                    "\n• [`Message`]($baseURL) = ${if(hd.notification != null) hd.notification.takeFirstN() else "*not set*"}" +
-                    "\n\u200B",
-            false
-        )
-
         embed.addField("\u200b",
             "\n\n\n__**To select a setting send its name (or an abbreviation) in this chat.**__" +
-                    "\nExamples:\n• `questions`\n• `answ`\n\n*Send `done` to exit this editor.*",
+                    "\nExamples:\n• `questions`\n• `answ`\n\n*Send `done` to exit this editor.*" +
+                    "\n\n__**Once you are finished editing your help desk use the `${ctx.prefix}hd update` command to apply the new settings!**__",
             false
         )
 
         ctx.respond(embed.build())
 
 
-        val choices = listOf("questions", "help desk message", "answers message", "channel", "message", "done")
+        val choices = listOf("questions", "help desk message", "answers message", "done")
 
         val choice = ctx.channel.awaitSpecificMessage(ctx.userID, choices, 120000)
 
         when (choice) {
             null ->  {
-                ctx.respond(Embeds.operationFailed("2 minutes time limit exceed.", "Next time send a value within 60 seconds."))
+                ctx.respond(Embeds.operationFailed("2 minutes time limit exceed.", "Next time send a value within 2 minutes."))
                 return
             }
             "done" -> {
@@ -97,10 +91,8 @@ class Edit:AbstractCmd(HelpDesk()) {
 
         val cmdName = when (choice) {
             "questions" -> "questions"
-            "help desk message" -> "helpdeskmessage"
-            "answers message" -> "answersmessage"
-            "channel" -> "notichannel"
-            "message" -> "notimessage"
+            "help desk message" -> "helpdeskMessage"
+            "answers message" -> "answersMessage"
             else -> "questions"
         }
         ctx.cmd = CommandsHandler.getCommand(getDefaultPath() + "/${cmdName}")

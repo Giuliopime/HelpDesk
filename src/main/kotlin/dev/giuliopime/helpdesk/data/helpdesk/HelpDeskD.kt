@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 data class HelpDeskD(
     var channelID: String,
     var messageID: String,
-    val notification: String? = null,
-    val notificationChannel: String? = null,
     val embedProperties: EmbedPropertiesD = EmbedPropertiesD(),
-    val responseEmbedProperties: EmbedPropertiesD = EmbedPropertiesD(),
+    val answerEmbedProperties: EmbedPropertiesD = EmbedPropertiesD(),
     val questions: MutableList<QuestionD> = mutableListOf(),
-    val specialQuestion: SpecialQuestionD? = null
 )
