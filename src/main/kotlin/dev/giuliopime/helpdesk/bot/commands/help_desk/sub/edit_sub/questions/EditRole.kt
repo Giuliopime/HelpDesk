@@ -45,7 +45,7 @@ class EditRole: AbstractCmd(Questions.HandleQuestion()) {
         })
 
         val msg = ctx.channel.awaitMessageOrNull({
-            it.author.id == ctx.userID && (it.message.contentRaw.toLowerCase() == "delete" || it.message.getRole() != null)
+            it.author.id == ctx.userID && (it.message.contentRaw.toLowerCase() == "delete" || (it.message.getRole() != null && it.message.getRole()!!.guild.id == ctx.guildID))
         })
 
         if (msg == null) {

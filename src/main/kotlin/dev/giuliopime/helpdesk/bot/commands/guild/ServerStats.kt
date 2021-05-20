@@ -6,10 +6,10 @@ import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.timeseriesDB.controllers.GuildStatsController
 import dev.minn.jda.ktx.Embed
 
-class GuildStats: AbstractCmd() {
+class ServerStats: AbstractCmd() {
     init {
-        name = "guildStats"
-        aliases = listOf("gStats", "gStat", "guildStat")
+        name = "serverStats"
+        aliases = listOf("sStats", "sStat")
         description = "Gives you some statistics about Help Desk's usage in the server."
         cooldown = 5000
         category = CmdCategory.GUILD

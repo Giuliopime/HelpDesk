@@ -3,7 +3,7 @@ package dev.giuliopime.helpdesk.bot.internals.commands
 import dev.giuliopime.helpdesk.bot.HelpDesk
 import dev.giuliopime.helpdesk.bot.commands.guild.Config
 import dev.giuliopime.helpdesk.bot.commands.guild.Prefix
-import dev.giuliopime.helpdesk.bot.commands.guild.GuildStats
+import dev.giuliopime.helpdesk.bot.commands.guild.ServerStats
 import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.*
 import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.*
 import dev.giuliopime.helpdesk.bot.commands.help_desk.sub.edit_sub.questions.*
@@ -19,11 +19,8 @@ import dev.giuliopime.helpdesk.cache.handlers.CooldownsHandler
 import dev.giuliopime.helpdesk.data.guild.GuildD
 import dev.giuliopime.helpdesk.timeseriesDB.controllers.GuildStatsController
 import dev.giuliopime.helpdesk.utils.WebhooksService
-import dev.minn.jda.ktx.await
-import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import java.util.regex.Pattern
@@ -52,7 +49,7 @@ object CommandsHandler {
             // Guild
             Prefix(),
             Config(),
-            GuildStats(),
+            ServerStats(),
 
             // Help Desk
             dev.giuliopime.helpdesk.bot.commands.help_desk.HelpDesk(),

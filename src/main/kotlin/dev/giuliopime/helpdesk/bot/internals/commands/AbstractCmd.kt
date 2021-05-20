@@ -1,7 +1,6 @@
 package dev.giuliopime.helpdesk.bot.internals.commands
 
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
-import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotServerPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
 
@@ -19,7 +18,6 @@ abstract class AbstractCmd(val parentCmd: AbstractCmd? = null) {
 
     var uniqueUsage: Boolean = parentCmd?.uniqueUsage ?: false
 
-    var botServerPerms: BotServerPerms = parentCmd?.botServerPerms ?: BotServerPerms.NONE
     var botChannelPerms: BotChannelPerms = parentCmd?.botChannelPerms ?: BotChannelPerms.MESSAGES
     var userPerms: CmdUserPerms = parentCmd?.userPerms ?: CmdUserPerms.NONE
 

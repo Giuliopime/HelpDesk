@@ -85,9 +85,9 @@ class Update:AbstractCmd(HelpDesk()) {
             newEmbed.setThumbnail(hdEmbed.thumbnail)
             newEmbed.setImage(hdEmbed.image)
             newEmbed.setFooter(hdEmbed.footer, hdEmbed.footerIcon)
-            if(hdEmbed.footer != null) {
+            if(hdEmbed.timestamp != null) {
                 try {
-                    newEmbed.setTimestamp(Instant.ofEpochMilli(hdEmbed.timestamp!!.toLong()))
+                    newEmbed.setTimestamp(Instant.ofEpochMilli(hdEmbed.timestamp.toLong()))
                 } catch (e: Exception) {
                     ctx.respond(Embeds.operationFailed(
                         "An invalid timestamp has been provided for the Help Desk message.",
