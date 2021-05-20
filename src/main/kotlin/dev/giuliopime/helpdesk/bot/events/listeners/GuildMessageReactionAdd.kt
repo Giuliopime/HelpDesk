@@ -64,7 +64,7 @@ suspend fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
         ?: if (question.roleID != null) "I assigned you the <@&${question.roleID}> role in ${event.guild.name}." else null
 
     if (answer != null) {
-        val hdEmbed = helpDesk.embedProperties
+        val hdEmbed = helpDesk.answerEmbedProperties
 
         val embed = EmbedBuilder()
             .setColor(event.guild.selfMember.color ?: Colors.primary)
