@@ -32,7 +32,7 @@ object ApisConsumer {
     // Unused atm
     suspend fun hasUserVoted24(userID: String, source: Source = Source.TOPGG): Boolean {
         try {
-            val response: HttpResponse = client.get("https://api.votetracker.bot/v1/bot/715621848489918495/votes/${source.reqName}/$userID") {
+            val response: HttpResponse = client.get("https://api.votetracker.bot/v1/bot/739796627681837067/votes/${source.reqName}/$userID") {
                 headers {
                     append(HttpHeaders.Authorization, Settings.voteTrackerApiKey)
                 }
@@ -69,7 +69,7 @@ object ApisConsumer {
 
     suspend fun postServerCount(stats: TopggStatsD) {
         try {
-            client.post<Unit>("https://top.gg/api/bots/715621848489918495/stats") {
+            client.post<Unit>("https://top.gg/api/bots/739796627681837067/stats") {
                 headers {
                     append(HttpHeaders.Authorization, Settings.topggApiKey)
                 }
