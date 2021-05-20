@@ -5,9 +5,11 @@ import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
 import dev.giuliopime.helpdesk.data.topgg.TopggStatsD
 import dev.giuliopime.helpdesk.database.managers.GuildsForRemovalManager
+import dev.giuliopime.helpdesk.timeseriesDB.controllers.GuildStatsController
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import mu.KotlinLogging
+import net.dv8tion.jda.api.JDA
 import kotlin.concurrent.fixedRateTimer
 
 
@@ -41,6 +43,11 @@ object FixedRateTimers {
         }
     }
 
+    private val totalGuildsPoster = fixedRateTimer("Total guilds poster", false, 0L, 60000) {
+        if (HelpDesk.shardsManager.statuses.all { it.value == JDA.Status.CONNECTED })
+            GuildStatsController.writeTotalGuilds(HelpDesk.shardsManager.guilds.size.toLong())
+    }
+
     init {
         logger.info("Started fixed rate timers!")
     }
@@ -48,6 +55,7 @@ object FixedRateTimers {
     fun shutdown() {
         guildsForRemoval.cancel()
         topggStatsPoster.cancel()
+        totalGuildsPoster.cancel()
         logger.info("Fixed rate timers shutdown!")
     }
 }
