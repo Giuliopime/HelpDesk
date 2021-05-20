@@ -3,6 +3,7 @@ package dev.giuliopime.helpdesk.bot.commands.utility
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.Embed
 
 class Vote: AbstractCmd() {
@@ -16,7 +17,7 @@ class Vote: AbstractCmd() {
         ctx.respond(Embed {
             color = ctx.color.rgb
             title = "Vote for Help Desk"
-            url = "https://helpdesk.giuliopime.dev/vote"
+            url = URLs.vote
         })
     }
 }

@@ -6,6 +6,7 @@ import dev.giuliopime.helpdesk.bot.internals.commands.CommandsHandler
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.Embed
 import net.dv8tion.jda.api.EmbedBuilder
 
@@ -19,7 +20,7 @@ class Help: AbstractCmd() {
     }
     override suspend fun run(ctx: CmdCtx) {
         val prefix = ctx.prefix
-        val baseURL = "https://helpdesk.giuliopime.dev"
+        val baseURL = URLs.baseURL
 
         if (ctx.args.size > 0 && CommandsHandler.getCommandOrNull(ctx.args.joinToString("/").toLowerCase()) != null) {
             val cmd = CommandsHandler.getCommand(ctx.args.joinToString("/").toLowerCase())
@@ -112,7 +113,7 @@ class Help: AbstractCmd() {
             ctx.respond(Embed {
                 author {
                     name = "Help Interface"
-                    url = "https://helpdesk.giuliopime.dev"
+                    url = URLs.baseURL
                     iconUrl = ctx.guild.jda.selfUser.effectiveAvatarUrl
                 }
                 color = ctx.color.rgb

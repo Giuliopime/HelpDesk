@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed
 import java.awt.Color
 import java.time.Instant
 
-// TODO: Base url global variable
 object Embeds {
     // OPERATION RESULTS
     fun operationSuccessful(info: String): MessageEmbed = Embed {
@@ -64,7 +63,7 @@ object Embeds {
             .setTitle("${Reactions.Extended.error} Incorrect usage of the command")
             .addField("Proper usage", "```\n$cmdName ${cmd.usage}\n```", false)
             .addField("Examples", "```$exampleUsages\n```", false)
-            .addField("More info", "Use `${prefix}help ${cmdName}` for more info about this command.\nIf you are stuck check out [how to use commands](link).", false)
+            .addField("More info", "Use `${prefix}help ${cmdName}` for more info about this command.\nIf you are stuck check out [how to use commands](${URLs.baseURL}).", false)
             .build()
     }
 
@@ -77,7 +76,7 @@ object Embeds {
     val unknownFailure = Embed {
         color = Colors.red.rgb
         title = "${Reactions.Extended.error} Unknown issue"
-        description = "An unknown issue occurred :/\nIt has already been forwarded to the developers and it's gonna get fixed soon don't worry :)\n\nYou can join the [Support Server](link) to stay up to date with updates and bug fixes or to ask for assistance."
+        description = "An unknown issue occurred :/\nIt has already been forwarded to the developers and it's gonna get fixed soon don't worry :)\n\nYou can join the [Support Server](${URLs.support}) to stay up to date with updates and bug fixes or to ask for assistance."
         timestamp = Instant.now()
     }
 
@@ -98,7 +97,7 @@ object Embeds {
         descriptionBuilder.append("**Select an Help Desk on which you want to apply this command.**\n\nTo select an Help Desk send its index after this message.\nExample: `1`.")
 
         for ((index, hd) in helpdesks.withIndex())
-            descriptionBuilder.append("\n\n`${index + 1}.` **<#${hd.channelID}>** [message ID: [`${hd.messageID}`](https://discord.com/channels/${guildID}/${hd.channelID}/${hd.messageID})]")
+            descriptionBuilder.append("\n\n`${index + 1}.` **<#${hd.channelID}>** [message ID: [`${hd.messageID}`](${URLs.msgLink(guildID, hd.channelID, hd.messageID)}]")
 
         descriptionBuilder.append("\n\n*You have 60 seconds* to send the index.\n*To cancel* this action send `cancel`.")
 
@@ -120,7 +119,7 @@ object Embeds {
             .setTitle("${Reactions.Extended.error} Missing bot permissions")
             .setDescription(description.toString())
             .addField("Quick fix", "Go in the `Channel Settings`, click `Permission` in the left side menu, add `Help Desk` and assign him the permissions listed above.", false)
-            .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](link).", false)
+            .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](${URLs.baseURL}).", false)
             .build()
     }
 

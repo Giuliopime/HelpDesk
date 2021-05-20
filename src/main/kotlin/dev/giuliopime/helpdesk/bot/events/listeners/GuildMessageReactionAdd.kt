@@ -4,6 +4,7 @@ import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
 import dev.giuliopime.helpdesk.bot.internals.frontend.Colors
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.giuliopime.helpdesk.cache.handlers.CooldownsHandler
 import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
 import dev.giuliopime.helpdesk.timeseriesDB.controllers.GuildStatsController
@@ -53,7 +54,7 @@ suspend fun onGuildMessageReactionAddEvent(event: GuildMessageReactionAddEvent) 
         if (failed)
             event.channel.sendMessage(
                 "I'm unable to assign the ${role.asMention} role. If you are a moderator of the server make sure I have `Manage_Roles` permissions and that the role I have to assign is under the Help Desk role in the server role hierarchy." +
-                        "\nLearn more with [this article](https://support.discord.com/hc/en-us/articles/214836687-Gestione-dei-Ruoli-101)." +
+                        "\nLearn more with [this article](https://support.discord.com/hc/en-us/articles/214836687-Role-Management-101)." +
                         "\n\nIf you are not a moderator of the server report this error to one of them."
             ).queue()
     }
@@ -131,7 +132,7 @@ suspend fun onGuildMessageReactionAddEvent(event: GuildMessageReactionAddEvent) 
                     .setTitle("${Reactions.Extended.error} Missing permissions")
                     .setDescription(description.toString())
                     .addField("Quick fix", "Go in the `Channel Settings`, click `Permission` in the left side menu, add `Help Desk` and assign him the permissions listed above.", false)
-                    .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](link).", false)
+                    .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](${URLs.baseURL}).", false)
                     .build()
 
                 event.channel.sendMessage(embed).queue()

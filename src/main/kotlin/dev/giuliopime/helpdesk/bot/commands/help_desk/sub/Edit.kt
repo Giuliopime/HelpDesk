@@ -11,6 +11,7 @@ import dev.giuliopime.helpdesk.bot.internals.extentions.awaitSpecificMessage
 import dev.giuliopime.helpdesk.bot.internals.extentions.takeFirstN
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.await
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -36,7 +37,7 @@ class Edit:AbstractCmd(HelpDesk()) {
     }
 
     override suspend fun run(ctx: CmdCtx) {
-        val baseURL = "https://helpdesk.giuliopime.dev"
+        val baseURL = URLs.baseURL
         val hd = ctx.guildData.helpDesks[ctx.helpDeskIndex]
 
         val embed = EmbedBuilder()
@@ -46,7 +47,7 @@ class Edit:AbstractCmd(HelpDesk()) {
         embed.addField("\u200b\nInfo",
             "• `Channel` = <#${hd.channelID}>" +
                     "\n• `Message ID` = ${hd.messageID}" +
-                    "\n• `Direct link` = [here](https://discord.com/channels/${ctx.guildID}/${hd.channelID}/${hd.messageID})" +
+                    "\n• `Direct link` = [here](${URLs.msgLink(ctx.guildID, hd.channelID, hd.messageID)})" +
                     "\n\u200b",
             false
         )

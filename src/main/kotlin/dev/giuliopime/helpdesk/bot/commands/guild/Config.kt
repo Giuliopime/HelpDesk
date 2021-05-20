@@ -3,6 +3,7 @@ package dev.giuliopime.helpdesk.bot.commands.guild
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.Embed
 import java.time.Instant
 
@@ -16,7 +17,7 @@ class Config: AbstractCmd() {
     }
 
     override suspend fun run(ctx: CmdCtx) {
-        val baseURL = "https://helpdesk.giuliopime.dev"
+        val baseURL = URLs.baseURL
 
         val embed = Embed {
             title = "Help Desk configuration for ${ctx.guild.name}"

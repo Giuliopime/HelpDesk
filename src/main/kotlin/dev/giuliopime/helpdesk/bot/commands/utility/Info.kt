@@ -5,6 +5,7 @@ import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.Embed
 
 class Info: AbstractCmd() {
@@ -27,7 +28,7 @@ class Info: AbstractCmd() {
                     "\n• Version: `2.0.0`" +
                     "\n• Uptime: `${Settings.getReadableUptime()}`" +
                     "\n• Library: [`JDA`](https://github.com/DV8FromTheWorld/JDA)" +
-                    "\n• GitHub: [`Repository`](https://helpdesk.giuliopime.dev/github)" +
+                    "\n• GitHub: [`Repository`](${URLs.github})" +
                     "\n• Developer: `Giuliopime#4965`"
         })
     }
