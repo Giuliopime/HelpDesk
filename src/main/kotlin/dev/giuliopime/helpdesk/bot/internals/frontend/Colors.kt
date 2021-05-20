@@ -4,11 +4,11 @@ import java.awt.Color
 import kotlin.random.Random
 
 object Colors {
-    val primary: Color = Color.decode("#e741e9")
+    val primary: Color = Color.decode("#5865F2")
 
-    val green: Color = Color.decode("#43b581")
-    val yellow: Color = Color.decode("#faa619")
-    val red: Color = Color.decode("#f14846")
+    val green: Color = Color.decode("#57F287")
+    val yellow: Color = Color.decode("#FEE75C")
+    val red: Color = Color.decode("#ED4245")
 
     fun random(): Color {
         val random = Random

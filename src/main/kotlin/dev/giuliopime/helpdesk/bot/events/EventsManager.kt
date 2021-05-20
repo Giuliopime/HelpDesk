@@ -1,16 +1,14 @@
 package dev.giuliopime.helpdesk.bot.events
 
 import dev.giuliopime.helpdesk.bot.HelpDesk
-import dev.giuliopime.helpdesk.bot.events.listeners.onGuildJoin
-import dev.giuliopime.helpdesk.bot.events.listeners.onGuildMessageReactionAdd
-import dev.giuliopime.helpdesk.bot.events.listeners.onGuildMessageReceived
-import dev.giuliopime.helpdesk.bot.events.listeners.onReady
+import dev.giuliopime.helpdesk.bot.events.listeners.*
 import dev.giuliopime.helpdesk.bot.internals.Settings
 import dev.giuliopime.helpdesk.utils.WebhooksService
 import dev.minn.jda.ktx.listener
 import mu.KotlinLogging
 import net.dv8tion.jda.api.events.*
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
@@ -28,6 +26,8 @@ object EventsManager {
                     is ReadyEvent -> onReady(event)
 
                     is GuildJoinEvent -> onGuildJoin(event)
+                    is GuildLeaveEvent -> onGuildLeave(event)
+
                     is GuildMessageReceivedEvent -> onGuildMessageReceived(event)
                     is GuildMessageReactionAddEvent -> onGuildMessageReactionAdd(event)
 
