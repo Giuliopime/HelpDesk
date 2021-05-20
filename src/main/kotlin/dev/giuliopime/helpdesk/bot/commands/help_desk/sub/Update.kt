@@ -82,6 +82,7 @@ class Update:AbstractCmd(HelpDesk()) {
 
         try {
             newEmbed.setAuthor(hdEmbed.author, hdEmbed.authorURL, hdEmbed.authorIcon)
+            newEmbed.setTitle(hdEmbed.title, hdEmbed.titleURL)
             newEmbed.setDescription(hdEmbed.description)
             newEmbed.setThumbnail(hdEmbed.thumbnail)
             newEmbed.setImage(hdEmbed.image)
