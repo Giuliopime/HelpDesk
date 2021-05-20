@@ -3,6 +3,7 @@ package dev.giuliopime.helpdesk.bot.commands.utility
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.Embed
 
 class Invite: AbstractCmd() {
@@ -18,7 +19,7 @@ class Invite: AbstractCmd() {
             Embed {
                 color = ctx.color.rgb
                 title = "Invite Help Desk in your server!"
-                url = "https://helpdesk.giuliopime.dev/invite"
+                url = URLs.invite
             }
         )
     }

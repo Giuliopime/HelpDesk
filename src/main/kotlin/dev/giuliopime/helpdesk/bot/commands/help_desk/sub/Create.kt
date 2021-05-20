@@ -11,6 +11,7 @@ import dev.giuliopime.helpdesk.bot.internals.extentions.awaitMessageOrNull
 import dev.giuliopime.helpdesk.bot.internals.frontend.Colors
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.giuliopime.helpdesk.cache.handlers.GuildsHandler
 import dev.giuliopime.helpdesk.data.helpdesk.HelpDeskD
 import dev.minn.jda.ktx.Embed
@@ -75,7 +76,7 @@ class Create: AbstractCmd(HelpDesk()) {
                 .setTitle("${Reactions.Extended.error} Missing permissions")
                 .setDescription(description.toString())
                 .addField("Quick fix", "Go in the `Channel Settings`, click `Permission` in the left side menu, add `Help Desk` and assign him the permissions listed above.", false)
-                .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](link).", false)
+                .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](${URLs.baseURL}).", false)
                 .build()
             ctx.respond(embed)
             return
@@ -83,7 +84,7 @@ class Create: AbstractCmd(HelpDesk()) {
 
         val msg = channel.sendMessage(Embed {
             color = ctx.color.rgb
-            description = "**This is your new Help Desk**\n\n**I already opened a [`panel`](https://discord.com/channels/${ctx.guildID}/${ctx.channel.id}/${botMsg.id}) to add questions and edit the style of this Help Desk**.\n*Alternatively you can use `${ctx.prefix}helpdesk edit` to tweak it.*"
+            description = "**This is your new Help Desk**\n\n**I already opened a [`panel`](${URLs.msgLink(ctx.guildID, ctx.channel.id, botMsg.id)}) to add questions and edit the style of this Help Desk**.\n*Alternatively you can use `${ctx.prefix}helpdesk edit` to tweak it.*"
         }).await()
 
 

@@ -9,6 +9,7 @@ import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
 import dev.giuliopime.helpdesk.bot.internals.frontend.Colors
 import dev.giuliopime.helpdesk.bot.internals.frontend.Embeds
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.giuliopime.helpdesk.data.helpdesk.QuestionD
 import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.await
@@ -57,7 +58,7 @@ class Update:AbstractCmd(HelpDesk()) {
                 .setTitle("${Reactions.Extended.error} Missing permissions")
                 .setDescription(description.toString())
                 .addField("Quick fix", "Go in the `Channel Settings`, click `Permission` in the left side menu, add `Help Desk` and assign him the permissions listed above.", false)
-                .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](link).", false)
+                .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](${URLs.baseURL}).", false)
                 .build()
             ctx.respond(embed)
             return
@@ -162,6 +163,6 @@ class Update:AbstractCmd(HelpDesk()) {
                 editedMsg.addReaction(it.reaction!!).await()
         }
 
-        ctx.respond(Embeds.operationSuccessful("[`Help Desk`](https://discord.com/channels/${ctx.guildID}/${hd.channelID}/${hd.messageID}) correctly updated!"))
+        ctx.respond(Embeds.operationSuccessful("[`Help Desk`](${URLs.msgLink(ctx.guildID, hd.channelID, hd.messageID)}) correctly updated!"))
     }
 }

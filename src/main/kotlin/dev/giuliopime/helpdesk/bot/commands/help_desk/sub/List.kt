@@ -5,6 +5,7 @@ import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.CmdCtx
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdCategory
 import dev.giuliopime.helpdesk.bot.internals.frontend.Reactions
+import dev.giuliopime.helpdesk.bot.internals.frontend.URLs
 import dev.minn.jda.ktx.Embed
 
 class List: AbstractCmd(HelpDesk()) {
@@ -24,7 +25,7 @@ class List: AbstractCmd(HelpDesk()) {
             descriptionBuilder.append("\n\n__This server doesn't have any Help Desk.__")
 
         for ((index, helpdesk) in ctx.guildData.helpDesks.withIndex())
-            descriptionBuilder.append("\n\n`${index + 1}.` **<#${helpdesk.channelID}>** [message ID: [`${helpdesk.messageID}`](https://discord.com/channels/${ctx.guildID}/${helpdesk.channelID}/${helpdesk.messageID})]")
+            descriptionBuilder.append("\n\n`${index + 1}.` **<#${helpdesk.channelID}>** [message ID: [`${helpdesk.messageID}`](${URLs.msgLink(ctx.guildID, helpdesk.channelID, helpdesk.messageID)})]")
 
         ctx.respond(Embed {
             color = ctx.color.rgb
