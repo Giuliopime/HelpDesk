@@ -2,7 +2,6 @@ package dev.giuliopime.helpdesk.bot.internals.frontend
 
 import dev.giuliopime.helpdesk.bot.internals.commands.AbstractCmd
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotChannelPerms
-import dev.giuliopime.helpdesk.bot.internals.commands.enums.BotServerPerms
 import dev.giuliopime.helpdesk.bot.internals.commands.enums.CmdUserPerms
 import dev.giuliopime.helpdesk.data.helpdesk.HelpDeskD
 import dev.minn.jda.ktx.Embed
@@ -121,21 +120,6 @@ object Embeds {
             .setTitle("${Reactions.Extended.error} Missing bot permissions")
             .setDescription(description.toString())
             .addField("Quick fix", "Go in the `Channel Settings`, click `Permission` in the left side menu, add `Help Desk` and assign him the permissions listed above.", false)
-            .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](link).", false)
-            .build()
-    }
-
-    // TODO: Remove server perms?
-    fun missingBotServerPerms(permType: BotServerPerms): MessageEmbed {
-        val description = StringBuilder()
-        description.append("**Help Desk is missing the following permissions, please report it to a moderator of the server:**")
-        permType.discordPermissions.forEach { description.append("\n• ${it.getName()}") }
-
-        return EmbedBuilder()
-            .setColor(Colors.red)
-            .setTitle("${Reactions.Extended.error} Missing bot permissions")
-            .setDescription(description.toString())
-            .addField("Quick fix", "Go in the `Server Settings`, click `Roles` in the left side menu, find `Help Desk`, click on the `Permissions` tab and assign him the permissions listed above.", false)
             .addField("Why are those permissions required?", "You can find out why Help Desk needs those permissions [here](link).", false)
             .build()
     }
