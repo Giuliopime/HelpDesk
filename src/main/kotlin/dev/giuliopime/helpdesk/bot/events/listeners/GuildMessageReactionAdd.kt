@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.exceptions.HierarchyException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import java.time.Instant
 
-suspend fun onGuildMessageReactionAddEvent(event: GuildMessageReactionAddEvent) {
+suspend fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
     if (event.user.isBot || CooldownsHandler.isUserOnGlobalCd(event.userId))
         return
 
