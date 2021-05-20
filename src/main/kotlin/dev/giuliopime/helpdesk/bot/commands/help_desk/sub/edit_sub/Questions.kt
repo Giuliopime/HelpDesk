@@ -148,7 +148,7 @@ class Questions: AbstractCmd(Edit()) {
 
             ctx.respond(embed)
 
-            val choices = listOf("question", "answer", "reaction", "role", "notification channel", "notification message", "done", "delete")
+            val choices = listOf("question", "answer", "reaction", "role assignment", "notification channel", "notification message", "done", "delete")
 
             val choice = ctx.channel.awaitSpecificMessage(ctx.userID, choices)
 
@@ -162,7 +162,7 @@ class Questions: AbstractCmd(Edit()) {
                 "question" -> cmdName = "editQuestion"
                 "answer" -> cmdName = "editAnswer"
                 "reaction" -> cmdName = "editReaction"
-                "role" -> cmdName = "editRole"
+                "role assignment" -> cmdName = "editRole"
                 "notification channel" -> cmdName = "editNotiChannel"
                 "notification message" -> cmdName = "editNotiMessage"
                 else -> {

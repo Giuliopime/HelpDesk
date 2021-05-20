@@ -71,6 +71,7 @@ suspend fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
 
         try {
             embed.setAuthor(hdEmbed.author, hdEmbed.authorURL, hdEmbed.authorIcon)
+            embed.setTitle(hdEmbed.title, hdEmbed.titleURL)
             embed.setDescription(answer)
             embed.setThumbnail(hdEmbed.thumbnail)
             embed.setImage(hdEmbed.image)
