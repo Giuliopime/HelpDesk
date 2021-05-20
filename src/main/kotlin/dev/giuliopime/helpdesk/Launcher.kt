@@ -16,4 +16,10 @@ fun main() {
     MongoDBClient
     RedisClient
     InfluxClient
+
+    Runtime.getRuntime().addShutdownHook(
+        Thread {
+            HelpDesk.instance.shutdown("Shutdown manually via IDE or process manager.")
+        }
+    )
 }
