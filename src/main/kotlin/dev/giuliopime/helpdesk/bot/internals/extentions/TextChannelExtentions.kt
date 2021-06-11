@@ -40,7 +40,7 @@ suspend inline fun TextChannel.awaitSpecificMessage(
         val event = jda.await<GuildMessageReceivedEvent> {
             it.author.id == userID
                     && it.channel.id == id
-                    && okStrings.any { string -> string.toLowerCase().startsWith(it.message.contentRaw.toLowerCase()) }
+                    && okStrings.any { string -> string.lowercase().startsWith(it.message.contentRaw.lowercase()) }
         }
 
         if (autoDelete) {
@@ -49,8 +49,8 @@ suspend inline fun TextChannel.awaitSpecificMessage(
             catch (ignored: InsufficientPermissionException) { }
         }
 
-        return@withTimeoutOrNull okStrings.find { it.toLowerCase().startsWith(event.message.contentRaw.toLowerCase()) }
-            ?.toLowerCase()
+        return@withTimeoutOrNull okStrings.find { it.lowercase().startsWith(event.message.contentRaw.lowercase()) }
+            ?.lowercase()
     }
 }
 
@@ -69,7 +69,7 @@ suspend inline fun TextChannel.awaitNumericMessage(
             filter(it)
                     && it.author.id == userID
                     && it.channel.id == id
-                    && (it.message.contentRaw.toLowerCase() == cancelString ||
+                    && (it.message.contentRaw.lowercase() == cancelString ||
                     (it.message.contentRaw.toIntOrNull() != null
                             && it.message.contentRaw.toInt() >= lowerLimit
                             && it.message.contentRaw.toInt() <= upperLimit))
@@ -81,7 +81,7 @@ suspend inline fun TextChannel.awaitNumericMessage(
             catch (ignored: InsufficientPermissionException) { }
         }
 
-        if (event.message.contentRaw.toLowerCase() == cancelString)
+        if (event.message.contentRaw.lowercase() == cancelString)
             return@withTimeoutOrNull -1
 
         return@withTimeoutOrNull event.message.contentRaw.toIntOrNull()

@@ -25,9 +25,9 @@ abstract class AbstractCmd(val parentCmd: AbstractCmd? = null) {
 
     fun getDefaultPath(): String {
         return if (parentCmd == null)
-            name.toLowerCase()
+            name.lowercase()
         else
-            (parentCmd.getDefaultPath() + "/$name").toLowerCase()
+            (parentCmd.getDefaultPath() + "/$name").lowercase()
     }
 
     fun getAllPaths(): MutableList<String> {
@@ -57,11 +57,11 @@ abstract class AbstractCmd(val parentCmd: AbstractCmd? = null) {
 
     private fun getPossiblePaths(topLevel: String): MutableList<String> {
         return if (parentCmd == null)
-            mutableListOf(topLevel.toLowerCase())
+            mutableListOf(topLevel.lowercase())
         else {
             val possiblePaths = parentCmd.getAllPaths()
             for ((index, path) in possiblePaths.withIndex())
-                possiblePaths[index] = "$path/$topLevel".toLowerCase()
+                possiblePaths[index] = "$path/$topLevel".lowercase()
 
             possiblePaths
         }

@@ -89,7 +89,7 @@ object CommandsHandler {
 
     @Throws(NoSuchElementException::class)
     fun getCommand(path: String): AbstractCmd {
-        return commandsMap[path.toLowerCase()]
+        return commandsMap[path.lowercase()]
             ?: throw NoSuchElementException("Command not found at path $path")
     }
 
@@ -119,7 +119,7 @@ object CommandsHandler {
         }
 
         val prefixLength = when {
-            msgContent.toLowerCase().startsWith(guildData.prefix) -> guildData.prefix.length
+            msgContent.lowercase().startsWith(guildData.prefix) -> guildData.prefix.length
             msgContent.startsWith("<@$selfID>") -> "<@$selfID>".length
             msgContent.startsWith("<@!$selfID>") -> "<@!$selfID>".length
             else -> null
@@ -127,7 +127,7 @@ object CommandsHandler {
 
         val args = msgContent.drop(prefixLength).trim().split("\\s+".toRegex()).toMutableList()
 
-        val argsTLC = args.map { it.toLowerCase() }.toMutableList()
+        val argsTLC = args.map { it.lowercase() }.toMutableList()
 
         val flags = mutableListOf<String>()
 
@@ -135,11 +135,11 @@ object CommandsHandler {
         val subCmdsCheckLength = if (args.size > maxCmdsNesting) maxCmdsNesting else args.size
         for (i in subCmdsCheckLength downTo 1) {
             val cmdPath = args.take(i).joinToString("/")
-            val cmd = getCommandOrNull(cmdPath.toLowerCase())
+            val cmd = getCommandOrNull(cmdPath.lowercase())
             if (cmd != null) {
                 cmd.flags.forEach {
-                    if (argsTLC.contains(it.first.toLowerCase())) {
-                        flags.add(it.first.toLowerCase())
+                    if (argsTLC.contains(it.first.lowercase())) {
+                        flags.add(it.first.lowercase())
                         args.removeAll { arg -> it.first.equals(arg, ignoreCase = true) }
                     }
                 }
@@ -154,7 +154,6 @@ object CommandsHandler {
         try {
             val guildData = ctx.guildData
             val guild = ctx.guild
-            val channel = ctx.channel
             val member = ctx.member
             val cmd = ctx.cmd
 

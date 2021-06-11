@@ -22,8 +22,8 @@ class Help: AbstractCmd() {
         val prefix = ctx.prefix
         val baseURL = URLs.baseURL
 
-        if (ctx.args.size > 0 && CommandsHandler.getCommandOrNull(ctx.args.joinToString("/").toLowerCase()) != null) {
-            val cmd = CommandsHandler.getCommand(ctx.args.joinToString("/").toLowerCase())
+        if (ctx.args.size > 0 && CommandsHandler.getCommandOrNull(ctx.args.joinToString("/").lowercase()) != null) {
+            val cmd = CommandsHandler.getCommand(ctx.args.joinToString("/").lowercase())
             val cmdNamePath = cmd.getReadablePath()
 
             val description = StringBuilder().append("**Description**" +

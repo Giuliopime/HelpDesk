@@ -61,7 +61,7 @@ class EditNotiMessage: AbstractCmd(Questions.HandleQuestion()) {
             return
         }
 
-        val msgContent = if (msg.contentRaw.toLowerCase() == "delete") null else msg.contentRaw
+        val msgContent = if (msg.contentRaw.lowercase() == "delete") null else msg.contentRaw
 
         ctx.guildData = GuildsHandler.updateWithRoute(ctx.guildID, "helpDesks.${ctx.helpDeskIndex}.questions.$index.notificationMessage", msgContent)
 

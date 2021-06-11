@@ -45,7 +45,7 @@ class EditRole: AbstractCmd(Questions.HandleQuestion()) {
         })
 
         val msg = ctx.channel.awaitMessageOrNull({
-            it.author.id == ctx.userID && (it.message.contentRaw.toLowerCase() == "delete" || (it.message.getRole() != null && it.message.getRole()!!.guild.id == ctx.guildID))
+            it.author.id == ctx.userID && (it.message.contentRaw.lowercase() == "delete" || (it.message.getRole() != null && it.message.getRole()!!.guild.id == ctx.guildID))
         })
 
         if (msg == null) {
@@ -58,7 +58,7 @@ class EditRole: AbstractCmd(Questions.HandleQuestion()) {
             return
         }
 
-        val role = if (msg.contentRaw.toLowerCase() == "delete") null else msg.getRole()
+        val role = if (msg.contentRaw.lowercase() == "delete") null else msg.getRole()
 
         if (role != null && !ctx.guild.selfMember.canInteract(role)) {
             ctx.respond(Embeds.operationFailed(

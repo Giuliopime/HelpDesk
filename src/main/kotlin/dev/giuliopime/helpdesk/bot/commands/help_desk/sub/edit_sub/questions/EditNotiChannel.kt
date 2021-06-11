@@ -47,7 +47,7 @@ class EditNotiChannel: AbstractCmd(Questions.HandleQuestion()) {
         })
 
         val channelMsg = ctx.channel.awaitMessageOrNull({
-            it.author.id == ctx.userID && (it.message.contentRaw.toLowerCase() == "delete" || it.message.mentionedChannels.size > 0)
+            it.author.id == ctx.userID && (it.message.contentRaw.lowercase() == "delete" || it.message.mentionedChannels.size > 0)
         })
 
         if (channelMsg == null) {
@@ -60,7 +60,7 @@ class EditNotiChannel: AbstractCmd(Questions.HandleQuestion()) {
             return
         }
 
-        val channel = if (channelMsg.contentRaw.toLowerCase() == "delete") null else channelMsg.mentionedChannels.first()
+        val channel = if (channelMsg.contentRaw.lowercase() == "delete") null else channelMsg.mentionedChannels.first()
 
         if (channel != null && channel.guild.id != ctx.guildID) {
             ctx.respond(Embeds.operationFailed("The mentioned channel doesn't belong to this server.", "Reuse this command and provide a channel of this server."))

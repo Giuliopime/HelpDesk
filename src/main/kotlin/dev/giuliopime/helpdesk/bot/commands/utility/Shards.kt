@@ -9,6 +9,7 @@ import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import java.time.Instant
+import java.util.*
 
 class Shards: AbstractCmd() {
     init {
@@ -31,17 +32,18 @@ class Shards: AbstractCmd() {
             .setFooter("If you need support use ${ctx.prefix}support")
             .setTimestamp(Instant.now())
 
-        shardsManager.shards.forEach {
-            val ping = it.restPing.await()
-            val pingEmoji = if (it.status != JDA.Status.CONNECTED) Reactions.Extended.dnd
+        shardsManager.shards.forEach { shard ->
+            val ping = shard.restPing.await()
+            val pingEmoji = if (shard.status != JDA.Status.CONNECTED) Reactions.Extended.dnd
                 else if (ping < 300) Reactions.Extended.online
                 else Reactions.Extended.idle
 
             embed.addField(
-                "$pingEmoji Shard ${it.shardInfo.shardId}",
-                "• Servers = `${it.guilds.size}`" +
-                        "\n• Cached users = `${it.users.size}`" +
-                        "\n• Status = `${it.status.name.toLowerCase().capitalize()}`" +
+                "$pingEmoji Shard ${shard.shardInfo.shardId}",
+                "• Servers = `${shard.guilds.size}`" +
+                        "\n• Cached users = `${shard.users.size}`" +
+                        "\n• Status = `${shard.status.name.lowercase()
+                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}`" +
                         "\n• Ping = `$ping ms`",
                 true
             )

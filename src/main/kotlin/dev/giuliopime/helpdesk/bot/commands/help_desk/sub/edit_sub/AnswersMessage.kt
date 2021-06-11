@@ -87,7 +87,7 @@ class AnswersMessage:AbstractCmd(Edit()) {
         }
 
         override suspend fun run(ctx: CmdCtx) {
-            val property = ctx.args.first().toLowerCase().replace(" ", "_")
+            val property = ctx.args.first().lowercase().replace(" ", "_")
 
             val charLimit = when (property) {
                 "author" -> 256
@@ -141,7 +141,7 @@ class AnswersMessage:AbstractCmd(Edit()) {
             }
 
             val value = valueMsg.contentRaw
-            val propertyValue = if (value.toLowerCase() == "delete") null else value
+            val propertyValue = if (value.lowercase() == "delete") null else value
 
             val dbPropertyName = when(property) {
                 "author" -> "author"

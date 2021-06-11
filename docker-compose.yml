@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  helpdesk:
+    build: .
+    container_name: "helpdesk-bot"
+    depends_on:
+      - helpdesk-influxdb
+      - helpdesk-redis
+      - helpdesk-mongodb
+    env_file:
+      - .env
+    networks:
+      - helpdesk-network
+  helpdesk-redis:
+    image: redis:6.2.4
+    container_name: "helpdesk-redis"
+    restart: always
+    command: redis-server
+    networks:
+      - helpdesk-network
+  helpdesk-mongodb:
+    image: mongo:4.4.6
+    container_name: "helpdesk-mongodb"
+    restart: always
+    volumes:
+      - db-data:/data/db # This is the default location for mongodb data storing
+    networks:
+      - helpdesk-network
+  helpdesk-influxdb:
+    image: influxdb:2.0
+    container_name: "helpdesk-influxdb"
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - influx-data:/var/lib/influxdb2 # This is the default location for influxdb data storing
+    networks:
+      - helpdesk-network
+
+volumes:
+  db-data:
+  influx-data:
+
+networks:
+  helpdesk-network:
+    name: helpdesk-network

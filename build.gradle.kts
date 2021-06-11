@@ -1,15 +1,22 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.32"
+    id("application")
+
+    kotlin("jvm") version "1.5.10"
 
     // Shadow jars
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
+application.mainClass.set("dev.giuliopime.helpdesk.LauncherKt")
 group = "dev.giuliopime.helpdesk"
 version = "2.0"
+
+configure<JavaPluginConvention> {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+}
 
 repositories {
     mavenCentral()
@@ -18,7 +25,6 @@ repositories {
         url = uri("https://m2.dv8tion.net/releases")
     }
     maven("https://jitpack.io/")
-    jcenter()
 }
 
 val ktorVersion = "1.5.4"
@@ -52,24 +58,23 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
     implementation("org.slf4j:slf4j-api:1.7.28")
     implementation("ch.qos.logback:logback-classic:1.2.3")
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.10")
     implementation(kotlin("stdlib-jdk8"))
 }
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
-}
-
 tasks {
-    named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("shadow")
-        mergeServiceFiles()
-        manifest {
-            attributes(
-                mapOf(
-                    "Main-Class" to "dev.giuliopime.helpdesk.LauncherKt"
-                )
-            )
+    withType(JavaCompile::class) {
+        options.encoding = "UTF-8"
+    }
+    withType(KotlinCompile::class) {
+        kotlinOptions {
+            jvmTarget = "15"
         }
+    }
+
+    shadowJar {
+        archiveFileName.set("helpdesk.jar")
     }
 }
 
@@ -78,4 +83,3 @@ tasks {
         dependsOn(shadowJar)
     }
 }
-

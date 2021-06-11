@@ -4,6 +4,7 @@ import dev.giuliopime.helpdesk.bot.HelpDesk
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
 import mu.KotlinLogging
+import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -27,7 +28,7 @@ object Settings {
     }
 
     fun getFromEnv(key: String): String {
-        val value = dotenv[key.toUpperCase().replace('.', '_')]
+        val value = dotenv[key.uppercase().replace('.', '_')]
 
         if (value == null) {
             logger.error("Couldn't find any $key key in .env file.")
