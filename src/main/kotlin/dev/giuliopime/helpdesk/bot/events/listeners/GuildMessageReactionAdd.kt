@@ -109,7 +109,7 @@ suspend fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
             event.user.openPrivateChannel().await().sendMessage(embedMsg).await()
         } catch (e: ErrorResponseException) {
             val closedDMsMsg = event.channel.sendMessage("${event.member.asMention} your DMs are closed so I can't send you the answer of that question.\n*Open your DMs first, if you don't know how check out this article <https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings->*").await()
-            delay(1000L)
+            delay(10000L)
             try { closedDMsMsg.delete().queue() } catch (ignored: ErrorResponseException) {}
             return
         }
