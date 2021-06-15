@@ -31,7 +31,7 @@ val ktorVersion = "1.5.4"
 
 dependencies {
     // JDA
-    implementation("net.dv8tion:JDA:4.2.1_255") {
+    implementation("net.dv8tion:JDA:4.3.0_277") {
         exclude(module = "opus-java")
     }
     // JDA Utilities for Kotlin
