@@ -60,6 +60,7 @@ object CommandsHandler {
             Update(),
             Delete(),
             Questions(),
+            MoveQuestion(),
             Questions.HandleQuestion(),
             EditQuestion(),
             EditAnswer(),
